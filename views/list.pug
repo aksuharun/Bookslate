@@ -1,0 +1,15 @@
+extends layout
+
+block content
+	h2 #{itemType} list
+	if items != null && items.length
+		each item in items
+			h4 #{item.name}
+			p #{item._id}
+			br
+	else
+		- var url = '/' + name.toLowerCase() + '/add'
+		h4 There are no items in the #{itemType} list!
+		a(href=url style="text-decoration:none")
+			p Add a new item
+			
