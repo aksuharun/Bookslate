@@ -16,10 +16,9 @@ block content
 		const form = document.querySelector('form')
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault()
-			const id = form.id.value
-			console.log(id)
-			
-			axios.delete(id, {data: id})
+			const id = form.id.value.trim()
+
+			await axios.delete(id, {data: id})
 				.then(console.log)
 				.catch(console.error)
 		})
