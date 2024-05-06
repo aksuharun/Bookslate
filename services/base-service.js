@@ -18,7 +18,7 @@ class Service {
 	}
 	
 	async del(id){
-		return await this.model.findByIdAndDelete(mongoose)
+		return await this.model.findByIdAndDelete(id)
 	}
 
 }
