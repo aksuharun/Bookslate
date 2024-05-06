@@ -10,14 +10,13 @@ router.get('/add', (req, res) => {
 })
 
 router.get('/all', async (req, res) => {
-	const users = await UserService.findAll()
-	res.render('list', { items: users, itemType:'User' })
+	await UserService.findAll()
+		.then(users => {
+			res.render('list', { items: users, itemType:'User' })
+		})
+		.catch((err) => console.log(err))
 })
 
-router.get('/:id', async (req, res) => {
-	const user = await UserService.find(req.params.id)
-	res.send(user)
-})
 
 router.get('/update/:id', (req, res) => {
 	res.render('update-user', { id: req.params.id })
@@ -27,9 +26,19 @@ router.get('/delete', (req, res) => {
 	res.render('delete', { itemType: 'User' })
 })
 
+router.get('/:id', async (req, res) => {
+	await UserService.find(req.params.id)
+		.then(user => {
+			user.password = '********' // Hide the password
+			console.log('User:', user)
+			res.render('data', { data: user })
+		})
+		.catch((err) => console.log(err))
+})
+
 // Post, Update and Delete Methods
 router.post('/add', async (req, res) => {
-	const user = await UserService.add(req.body)
+	await UserService.add(req.body)
 		.then(user => {
 			console.log('User Added! User:', user)
 			res.redirect(`./${user._id}`) // Redirect to the user we just created
@@ -38,7 +47,7 @@ router.post('/add', async (req, res) => {
 })
 
 router.put('/update/:id', async (req, res) => {
-	const user = await UserService.update(req.params.id, req.body)
+	await UserService.update(req.params.id, req.body)
 		.then(user => {
 			console.log('User Updated! User:', user)
 			res.send(user)
@@ -47,12 +56,15 @@ router.put('/update/:id', async (req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
-	const user = await UserService.del(req.params.id)
+	await UserService.del(req.params.id)
 		.then(user => {
 			console.log('User Deleted! User:', user)
 			res.send(user)
 		})
-		.catch(err => console.log(err))
+		.catch(err =>{
+			console.log(err)
+			res.status(500).send(err)
+		})
 })
 
 const userRouter = router
