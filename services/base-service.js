@@ -29,12 +29,18 @@ class Service {
 	
 	async del(id){
 		if(await this.find(id)){
-			return await this.model.findByIdAndDelete(id)
+			try{
+				return await this.model.findByIdAndDelete(mongoose)
+			}
+			catch(err){
+				throw err
+			}
 		}
 		else{
 			throw new Error('Item not found')
 		}
 	}
+
 }
 
 
