@@ -14,7 +14,7 @@ router.get('/all', async (req, res) => {
 		.then(users => {
 			res.render('list', { items: users, itemType:'User' })
 		})
-		.catch((err) => console.log(err))
+		.catch(console.log)
 })
 
 
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 			console.log('User:', user)
 			res.render('data', { data: user })
 		})
-		.catch((err) => console.log(err))
+		.catch(console.log)
 })
 
 // Post, Update and Delete Methods

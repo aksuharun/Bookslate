@@ -54,8 +54,7 @@ block content
 			e.preventDefault()
 
 			const user = {
-				name: form.name.value,
-				surname: form.surname.value,
+				name: form.name.value +' '+ form.surname.value,
 				email: form.email.value,
 				password: form.password.value,
 				nativeLanguage: form.nativeLanguage.value,
@@ -63,7 +62,7 @@ block content
 			} 
 			
 			await axios.put('', user)
-				.then((res) => console.log(res))
-				.catch((err) => console.log(err))
+				.then(console.log)
+				.catch(console.log)
 			
 		})
