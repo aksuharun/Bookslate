@@ -8,7 +8,7 @@ block content
 			p #{item._id}
 			br
 	else
-		- var url = '/' + name.toLowerCase() + '/add'
+		- var url = '/' + itemType.toLowerCase() + '/add'
 		h4 There are no items in the #{itemType} list!
 		a(href=url style="text-decoration:none")
 			p Add a new item
