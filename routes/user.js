@@ -3,7 +3,6 @@ import UserService from '../services/user-service.js'
 
 const router = express.Router()
 
-
 // Get Methods
 router.get('/add', (req, res) => {
 	res.render('add-user')
