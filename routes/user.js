@@ -1,6 +1,5 @@
 import express from 'express'
 import UserService from '../services/user-service.js'
-import { logCreation } from './middleware.js'
 
 const router = express.Router()
 
@@ -17,7 +16,7 @@ router.get('/all', async (req, res) => {
 			})
 			res.render('list', { items: users, itemType:'User' })
 		})
-		.catch(console.log)
+		.catch((err) => res.json(err))
 })
 
 router.get('/all/json', async (req, res) => {
@@ -28,7 +27,7 @@ router.get('/all/json', async (req, res) => {
 			})	
 			res.json(users)
 		})
-		.catch(console.log)
+		.catch((err) => res.json(err))
 })
 
 router.get('/update/:id', (req, res) => {
@@ -43,10 +42,9 @@ router.get('/:id', async (req, res) => {
 	await UserService.find(req.params.id)
 		.then(user => {
 			user.password = '********' // Hide the password
-			console.log('User:', user)
 			res.render('data', { data: user })
 		})
-		.catch(console.log)
+		.catch((err) => res.json(err))
 })
 
 router.get('/:id/json', async (req, res) => {
@@ -55,39 +53,35 @@ router.get('/:id/json', async (req, res) => {
 			user.password = '********' // Hide the password
 			res.json(user)
 		})
-		.catch(console.log)
+		.catch((err) => res.json(err))
 })
 
-// Post, Update and Delete Methods
 router.post('/add', async (req, res) => {
 	await UserService.add(req.body)
 		.then(user => {
-			console.log('User Added! User:', user)
-			res.redirect(`/${user._id}`) // Redirect to the user we just created
+			res.json(user) // Redirect to the user we just created
 		})
-		.catch(console.log)
+		.catch((err) => {
+			res.status(500).json(err)
+		})
 })
 
 router.put('/update/:id', async (req, res) => {
 	await UserService.update(req.params.id, req.body)
 		.then(user => {
-			console.log('User Updated! User:', user)
-			res.send(user)
+			res.json(user)
 		})
-		.catch(err => console.log(err))
+		.catch(err => res.status(500).json(err))
 })
 
 router.delete('/:id', async (req, res) => {
 	await UserService.del(req.params.id)
 		.then(user => {
-			console.log('User Deleted! User:', user)
-			res.send(user)
+			res.json(user)
 		})
 		.catch(err =>{
-			console.log(err)
-			res.status(500).send(err)
+			res.status(500).json(err)
 		})
 })
 
-const userRouter = router
-export default userRouter
+export default router
