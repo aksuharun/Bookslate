@@ -1,12 +1,61 @@
-import logService from "../services/log-service.js"
+import jwt from 'jsonwebtoken'
+import UserService from '../services/user-service.js'
 
-function logCreation(req, res, next){
-	if(req.originalUrl.includes('user')){
-		// logService.add({
-			
-		// })
+function isAuthenticated (req, res, next) {
+	const token = req.cookies.token
+	if (!token) {
+		return res.status(401).json({ msg: 'Token is missing' })
 	}
-	next()
+
+	jwt.verify(token, process.env.JWT_KEY_SECRET, (err, decoded) => {
+		if (err) {
+			return res.status(401).json({ msg: 'Unauthorized' })
+		}
+		req._id = decoded._id
+		req.userRole = decoded.userRole
+		next()
+	})
 }
 
-export { logCreation }
+function isAdmin (req, res, next) {
+	const token = req.cookies.token
+	if (!token) {
+		return res.status(401).json({ msg: 'Token is missing' })
+	}
+
+	jwt.verify(token, process.env.JWT_KEY_SECRET, async (err, decoded) => {
+		if (err) {
+			return res.status(401).json({ msg: 'Unauthorized' })
+		}
+		const user = await UserService.find(decoded._id)
+		if (user.userRole != 'admin') {
+			console.log(user)
+			return res.status(403).json({ msg: 'Forbidden' })
+		}
+		req._id = decoded._id
+		req.userRole = decoded.userRole
+		next()
+	})
+}
+
+function isSelfOrAdmin (req, res, next) {
+	const token = req.cookies.token
+	if (!token) {
+		return res.status(401).json({ msg: 'Token is missing' })
+	}
+
+	jwt.verify(token, process.env.JWT_KEY_SECRET, async (err, decoded) => {
+		if (err) {
+			return res.status(401).json({ msg: 'Unauthorized' })
+		}
+		const user = await UserService.find(decoded._id)
+		if (user.userRole != 'admin' && user._id != req.body._id) {
+			return res.status(403).json({ msg: 'Forbidden' })
+		}
+		req._id = decoded._id
+		req.userRole = decoded.userRole
+		next()
+	})
+}
+
+export { isAuthenticated, isAdmin, isSelfOrAdmin }
