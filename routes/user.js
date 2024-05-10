@@ -58,6 +58,8 @@ router.get('/:id/json', async (req, res) => {
 		.catch((err) => res.json(err))
 })
 
+// Post, Put, Delete Methods
+
 router.post('/add', isAdmin, async (req, res) => {
 	await UserService.add(req.body)
 		.then((user) => {
