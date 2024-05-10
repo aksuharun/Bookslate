@@ -5,6 +5,28 @@ import LogService from '../services/log-service.js'
 
 const router = express.Router()
 
+router.get('/register', (req, res) => {
+	res.render('register')
+})
+
+router.get('/login', (req, res) => {
+	res.render('login')
+})
+
+router.post('/singup', async (req, res) => {
+	await UserService.add(req.body)
+		.then(user => {
+			LogService.add({
+				userId: user._id,
+				action: 'Signup',
+				refType: 'User',
+				refId: user._id
+			})
+			res.json({ msg: 'User Added' })
+		})
+		.catch(err => res.status(500).json({ err: err.message }))
+})
+
 router.post('/login', async (req, res) => {
 	res.clearCookie('token')
 	await UserService.login(req.body)

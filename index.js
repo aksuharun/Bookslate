@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 
 import userRouter from './routes/user.js'
+import bookRouter from './routes/book.js'
 import authRouter from './routes/auth.js'
 
 import './mongo-connection.js'
@@ -20,6 +21,7 @@ app.use(express.static('views'))
 app.use(cookieParser())
 
 app.use('/user', userRouter)
+app.use('/book', bookRouter)
 app.use('/auth', authRouter)
 
 app.get('/', (req, res) => {

@@ -64,7 +64,7 @@ router.post('/add', isAdmin, async (req, res) => {
 	await UserService.add(req.body)
 		.then((user) => {
 			LogService.add({
-				userId: req._id,
+				userId: req.decoded._id,
 				action: 'Add',
 				refType: 'User',
 				refId: user._id
@@ -78,7 +78,7 @@ router.put('/update/:id', isSelfOrAdmin, async (req, res) => {
 	await UserService.update(req.params.id, req.body)
 		.then((user) => {
 			LogService.add({
-				userId: req._id,
+				userId: req.decoded._id,
 				action: 'Update',
 				refType: 'User',
 				refId: user._id

@@ -1,0 +1,20 @@
+extends layout
+
+block content
+	h2 Login
+	form(method="post" action="/login")
+		label(for="email") Email: 
+		br
+		input(type="email" id="email" name="email" required)
+		br
+		br
+		
+		label(for="password") Password: 
+		br
+		input(type="password" id="password" name="password" required)
+		br
+		br
+		
+		button(type="submit") Login
+
+	script(src="/script.js")

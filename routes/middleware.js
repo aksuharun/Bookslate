@@ -11,8 +11,7 @@ function isAuthenticated (req, res, next) {
 		if (err) {
 			return res.status(401).json({ msg: 'Unauthorized' })
 		}
-		req._id = decoded._id
-		req.userRole = decoded.userRole
+		req.decoded = decoded
 		next()
 	})
 }
@@ -32,8 +31,7 @@ function isAdmin (req, res, next) {
 			console.log(user)
 			return res.status(403).json({ msg: 'Forbidden' })
 		}
-		req._id = decoded._id
-		req.userRole = decoded.userRole
+		req.decoded = decoded
 		next()
 	})
 }
@@ -52,8 +50,7 @@ function isSelfOrAdmin (req, res, next) {
 		if (user.userRole != 'admin' && user._id != req.body._id) {
 			return res.status(403).json({ msg: 'Forbidden' })
 		}
-		req._id = decoded._id
-		req.userRole = decoded.userRole
+		req.decoded = decoded
 		next()
 	})
 }

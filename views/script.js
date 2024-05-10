@@ -11,7 +11,7 @@ form.addEventListener('submit', async (e) => {
 				data.name = data.name + ' ' + data.surname;
 				delete data.surname;
 		}
-
+		console.log('ho')
 		await axios.post('', {...data})
 				.then(console.log)
 				.catch(console.error);
