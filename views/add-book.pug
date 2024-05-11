@@ -1,0 +1,45 @@
+extends layout
+
+block content
+	h2 Add Book
+
+	form(method="post" id="form" enctype="multipart/form-data")
+		label(for="title") Title: 
+		br
+		input(type="text" id="title" name="title" required)
+		br
+		br
+
+		label(for="author") Author: 
+		br
+		input(type="text" id="author" name="author" required)
+		br
+		br
+	
+		label(for="language") Language:
+		br
+		input(type="text" id="language" name="language" required)
+		br
+		br
+
+		label(for="level") Level:
+		br
+		input(type="text" id="level" name="level" required)
+		br
+		br
+
+		label(for="coverImageFile") Upload an image:
+		br
+		input(type="file" id="coverImageFile" name="coverImageFile" accept=".jpg, .jpeg, .png" required)
+		br
+		br
+		
+		label(for="bookFile") File:
+		br
+		input(type="file" id="bookFile" name="bookFile" accept=".pdf" required)
+		br
+		br
+
+		button(type="submit") Add Book 
+
+	script(src="/script.js") 

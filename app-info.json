@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "bookslate-app",
+  "private_key_id": "2923f20715d778e41625224be402e7aff2dc0801",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC07x4T2NNUyWMo\nqJyNYS70S0bahs/bdD2PepmkXTEtFrgP33AM6R7YEmjcpnT0n6EQHbP8tEuQ2cy6\neqjjN93pX18cGSa06gjnS+bVWHfex2Q10f/ycOQk9K9DYSGawbb5oA0Kmaj1HjPc\nQiui95XOS9xwM4WX6iAJ/9YbGm+q6sNPnOiSKrwkwwAW5LX4lQT7vfLLVGEfc4Md\n6iITolsFRdMZvGsPCt7p0S7uh7hvNFF6S43CX9Zf9UOxfv0H75e4RMgQAj4nzK2z\n0hBeuxDxPBf+pHUywyGppDH3LGEN3PPe8uGq6I6LLvIsCbN9vZudp1vZG+pP9eeN\nEifcikb5AgMBAAECggEALCNfB4FwAHGGbo8/bZ/lF/RbKwkTINqI//ztCTMwwWqW\n6UxdJdEi1JwdF6LFyj08ydUtKLsE6ievsVgl5hQlXv6EkbKzBhRHqsER5T7JM0AZ\n+qUploeiqD9GmB3UWE/kZp38QHc+x9kf1p4Pzhgu494OvxJahzY2ranLHd6DmkJz\nbD5VLMPuDJUFcGu4SNtjPq/0KDuPSp6EzmlOXycIKhAfd57DWyraHqmj+9jfx6hQ\n0xmlproSdN+VERU7G9NvquR2QRK7yGXn/NYerbUwnhvkov4GCsByPDNwQ6sWd+GR\nZy9pogRHSPZaCcqXbaZC73ZySk4T+PhI4ZTO7UN7/wKBgQD/RD2PhPG6oT64Bs30\n/JExoK5pohoG4UoLy12BC02FuOgN5WMUTwxIi7iVCni9lMrGJcJ25ZdarwlhciyJ\noZHh0iBOIbI8Wg9Xj3ovxIvI+/8eInxKVtQW9tlC/fUCDVo9ecRoSJIaGaw21afD\neI4IcMvi5qlBGcEYhzYM9FYI0wKBgQC1dDPHdNJqrweTYvmfsXU7ijbffVBs5P/V\ns4kJpqP+dPo4VqsI+nPsJXa0Tb5MgB2/1B2Z71JxqwtROjeif+/z8TR+lPyn/tKq\nv4joTI7i9lfG6wOR/cS0de8zzz/3trt9AJoW0fyB/HLzkjH6AhmzURZnBmjbXLZW\nFSH3scNRgwKBgQCxsZo87umq5hYX2rzCPpL//f+LjwkZIvj9jtqPOwQDAz2edsDq\n4UAGvCSIs5prNkmVd7GQPLCIsvIPwH/aavt3PGO6n+BH/NVTOZBv8hzwkuL74jut\nMBZByiJhbRGCFTNtOfeMNIBn5Nkp7r7y5lfQ7lwvnivSIpB1d6IbkHbXewKBgQCY\nA5m9Z2lAZxH5r9lgp9KG5uvBn8JY+CA8cARGSYzqCCX4PONcyjWDiH9B3j+m504E\n/zctVwnCoIECs7sYMAZeX5ySz047j4f99ChGNJ0gFzDCPPDoxaidZo/W37G/XR8F\nQhPVOmZIn63N0JR91nShfTU/amc+HxXCWEH0uL/g8QKBgFg66GVL4xk8zsrVr6wm\n87b5jZv35/QVs5tbZ1lgwvMMQOufSN0oVWtwwa09z02W6AYPqvRdDVlFRxS6OfSp\n0cW+umqrWWIeqo7dw9t4raLONqZ6Cg/kKoGHTrMw1wYKeNrN1jAFuU0T6AffOzKE\nhL6EFZxgW+XE9eGrkJrkmhmS\n-----END PRIVATE KEY-----\n",
+  "client_email": "admin-service@bookslate-app.iam.gserviceaccount.com",
+  "client_id": "106256150410354221500",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/admin-service%40bookslate-app.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
