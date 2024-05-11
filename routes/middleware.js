@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import UserService from '../services/user-service.js'
+import multer from 'multer'
 
 function isAuthenticated (req, res, next) {
 	const token = req.cookies.token
@@ -55,4 +56,18 @@ function isSelfOrAdmin (req, res, next) {
 	})
 }
 
-export { isAuthenticated, isAdmin, isSelfOrAdmin}
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, 'uploads/')
+	},
+	filename: function (req, file, cb) {
+		const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+		const ext = file.mimetype.split('/').pop()
+		const kebabCase = file.originalname.replace(/\s+/g, '-').toLowerCase().split('.').slice(0, -1)
+		cb(null, kebabCase + '-' + uniqueSuffix + '.' + ext)
+	}
+})
+
+const uploadHandler = multer({ storage: storage })
+
+export { isAuthenticated, isAdmin, isSelfOrAdmin, uploadHandler}

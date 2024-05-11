@@ -1,31 +1,13 @@
 import express from 'express'
-import BookService from '../services/book-service.js'
 import LogService from '../services/log-service.js'
+import BookService from '../services/book-service.js'
 import CloudStorageService from '../services/cloud-storage-serice.js'
-import { isAuthenticated, isAdmin } from './middleware.js'
-import multer from 'multer'
-
-// Set up custom storage for Multer
-const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-			cb(null, 'uploads/')
-			console.log('File uploaded to uploads folder')
-	},
-	filename: function (req, file, cb) {
-			// Use the original file name and append the original extension
-			const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-			const ext = file.originalname.split('.').pop()
-			cb(null, file.fieldname + '-' + uniqueSuffix + '.' +ext)
-			console.log('File name changed')
-	}
-})
-
-const upload = multer({ storage: storage }) 
+import { isAuthenticated, isAdmin, uploadHandler } from './middleware.js'
 
 const router = express.Router()
 
-// Get Methods
 
+// Get Methods
 router.get('/add', (req, res) => {
 	res.render('add-book')
 })
@@ -73,15 +55,44 @@ router.get('/:id/json', async (req, res) => {
 // Post, Put, Delete Methods
 
 const bookFields = [
-	{ name: 'bookFile', maxCount: 1 },
-	{ name: 'coverImageFile', maxCount: 1 }
+	{
+		name: "bookFile",
+		maxCount: 1
+	},
+	{
+		name: "coverImageFile",
+		maxCount: 1
+	}
 ]
 
-router.post('/add', isAdmin, upload.fields(bookFields), async (req, res) => {
-	console.log(req.body)
-	console.log(req.files)
-	res.json({ msg: 'Book added' })
-})
+router.post('/add', isAdmin, uploadHandler.fields(bookFields), async (req, res) => {
+	try {
+		const bookFile = req.files['bookFile'][0];
+		const coverImageFile = req.files['coverImageFile'][0];
+		await CloudStorageService.uploadFiles(
+			'uploads/',
+			[bookFile.filename, coverImageFile.filename],
+			'books/'
+		)
+		const book = await BookService.add({
+			title: req.body.title,
+			author: req.body.author,
+			language: req.body.language,
+			level: req.body.level,
+			fileUrl: 'books/' + bookFile.filename,
+			coverImageUrl: 'books/' + coverImageFile.filename,
+		})
+		await LogService.add({
+			userId: req.decoded._id,
+			action: 'Add',
+			refType: 'Book',
+			refId: book._id,
+		})
+		res.json({ msg: 'Book added' });
+	} catch (err) {
+		res.status(400).json(err);
+	}
+});
 
 router.put('/update/:id', isAdmin, async (req, res) => {
 	await BookService.update(req.params.id, req.body)

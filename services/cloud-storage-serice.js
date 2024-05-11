@@ -27,10 +27,10 @@ class CloudStorageService{
 			.catch(err => console.error('ERROR:', err))
 	}
 
-	async uploadFiles(srcFiles = [], dest, bucket = this.bucketName) {
+	async uploadFiles(src, files = [], dest, bucket = this.bucketName) {
 		try{
-			srcFiles.forEach(async src => {
-				await this.uploadFile(src, dest, bucket)
+			files.forEach(async file => {
+				await this.uploadFile(src + file, dest + file, bucket)
 			})
 		} catch(err){
 			console.error('ERROR:', err)

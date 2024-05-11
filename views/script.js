@@ -12,7 +12,7 @@ form.addEventListener('submit', async (e) => {
 				delete data.surname;
 		}
 		
-		if(data.bookFile && data.imageFile){
+		if(data.bookFile && data.coverImageFile){
 			return await axios.post('', data, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
