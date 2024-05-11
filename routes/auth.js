@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
 			const token = jwt.sign(
 				{ _id }, 
 				process.env.JWT_KEY_SECRET, 
-				{ expiresIn: 600 } // Update the expiration time when the development is done
+				{ expiresIn: '1h' }
 			)
 			res.cookie('token', token, {
 					httpOnly: true, 
