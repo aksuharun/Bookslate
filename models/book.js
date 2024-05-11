@@ -11,7 +11,7 @@ const bookSchema = new mongoose.Schema({
 		required: true,
 	},
 
-	lanugage: {
+	language: {
 		type: String,
 		required: true
 	},
