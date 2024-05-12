@@ -22,14 +22,14 @@ function isAdmin (req, res, next) {
 	if (!token) {
 		return res.status(401).json({ msg: 'Token is missing' })
 	}
-
+	
 	jwt.verify(token, process.env.JWT_KEY_SECRET, async (err, decoded) => {
 		if (err) {
 			return res.status(401).json({ msg: 'Unauthorized' })
 		}
 		const user = await UserService.find(decoded._id)
 		if (user.userRole != 'admin') {
-			console.log(user)
+			console.log('${user._id trying to access admin route}')
 			return res.status(403).json({ msg: 'Forbidden' })
 		}
 		req.decoded = decoded
@@ -56,6 +56,8 @@ function isSelfOrAdmin (req, res, next) {
 	})
 }
 
+multer({ dest: 'uploads/' })
+
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, 'uploads/')
@@ -69,5 +71,6 @@ const storage = multer.diskStorage({
 })
 
 const uploadHandler = multer({ storage: storage })
+
 
 export { isAuthenticated, isAdmin, isSelfOrAdmin, uploadHandler}

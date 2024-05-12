@@ -11,14 +11,26 @@ form.addEventListener('submit', async (e) => {
 				data.name = data.name + ' ' + data.surname;
 				delete data.surname;
 		}
-		
-		if(data.bookFile && data.coverImageFile){
-			return await axios.post('', data, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
+
+
+
+		if (form.getAttribute('method') === 'post') {
+				if (data.bookFile && data.coverImageFile) {
+						return await axios.post('', data, {
+								headers: {
+										'Content-Type': 'multipart/form-data'
+								}
+						}).then(console.log).catch(console.error)
 				}
-			}).then(console.log).catch(console.error)
+				return await axios.post('', data).then(console.log).catch(console.error)
 		}
 
-		await axios.post('', data).then(console.log).catch(console.error)
-})
+		if(data.bookFile && data.coverImageFile) {
+				return await axios.put('', data, {
+						headers: {
+								'Content-Type': 'multipart/form-data'
+						}
+				}).then(console.log).catch(console.error)
+		}
+		return await axios.put('', data).then(console.log).catch(console.error)
+	})

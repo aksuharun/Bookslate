@@ -68,8 +68,7 @@ router.get('/:id/json', async (req, res) => {
 		})
 })
 
-// Post, Put, Delete Methods
-
+// Book Fields required for upload and update operations
 const bookFields = [
 	{
 		name: "bookFile",
@@ -80,17 +79,60 @@ const bookFields = [
 		maxCount: 1
 	}
 ]
+// Post, Put, Delete Methods
+
 
 router.post('/add', isAdmin, uploadHandler.fields(bookFields), async (req, res) => {
-	try {
-		const bookFile = req.files['bookFile'][0];
-		const coverImageFile = req.files['coverImageFile'][0];
+	const bookFile = req.files['bookFile'] ? req.files['bookFile'][0] : null
+	const coverImageFile = req.files['coverImageFile'] ? req.files['coverImageFile'][0] : null
+	if(!bookFile || !coverImageFile) throw new Error('Files not uploaded')
+	try{
 		await CloudStorageService.uploadFiles(
 			'uploads/',
 			[bookFile.filename, coverImageFile.filename],
 			'books/'
 		)
+
 		const book = await BookService.add({
+			title: req.body.title,
+			author: req.body.author,
+			language: req.body.language,
+			level: req.body.level,
+			fileUrl: 'books/' + bookFile.filename,
+			coverImageUrl: 'books/' + coverImageFile.filename,
+		})
+
+		await LogService.add({
+			userId: req.decoded._id,
+			action: 'Add',
+			refType: 'Book',
+			refId: book._id,
+		})
+		res.json({ msg: 'Book added successfully'})
+	}catch(err){
+		console.log(err)
+		res.status(400).json({ msg: 'Error adding book'})
+	}
+})
+
+router.put('/update/:id', isAdmin, uploadHandler.fields(bookFields) , async (req, res) => {
+	const bookFile = req.files['bookFile'] ? req.files['bookFile'][0] : null
+	const coverImageFile = req.files['coverImageFile'] ? req.files['coverImageFile'][0] : null
+	if(!bookFile || !coverImageFile) throw new Error('Files not uploaded')
+	try {
+
+		const book = await BookService.find(req.params.id)
+
+		await CloudStorageService.moveFiles(
+			[book.fileUrl, book.coverImageUrl],
+			'old-books/'
+		)
+		await CloudStorageService.uploadFiles(
+			'uploads/',
+			[bookFile.filename, coverImageFile.filename],
+			'books/'
+		)
+		await BookService.update(req.params.id, {
 			title: req.body.title,
 			author: req.body.author,
 			language: req.body.language,
@@ -100,50 +142,32 @@ router.post('/add', isAdmin, uploadHandler.fields(bookFields), async (req, res) 
 		})
 		await LogService.add({
 			userId: req.decoded._id,
-			action: 'Add',
+			action: 'Update',
 			refType: 'Book',
 			refId: book._id,
 		})
-		res.status(201).json({ msg: 'Book added' });
-	} catch (err) {
+		res.json({ msg: 'Book updated successfully'})
+	}catch(err){
 		console.log(err)
-		res.status(400).json({ msg: 'Error adding book'});
+		res.status(400).json({ msg: 'Error updating book'})
 	}
-});
-
-router.put('/update/:id', isAdmin, async (req, res) => {
-	await BookService.update(req.params.id, req.body)
-		.then(() =>{
-			LogService.add({
-				userId: req.decoded._id,
-				action: 'Update',
-				refType: 'Book',
-				refId: req.params.id
-			})
-			res.json({ msg: 'Book updated' })
-		})
-		.catch((err) => {
-			console.log(err)
-			res.status(400).json({ msg: 'Error updating book'})
-		
-		})
 })
 
 router.delete('/delete/:id', isAdmin, async (req, res) => {
-	await BookService.delete(req.params.id)
-		.then(() => {
-			LogService.add({
-				userId: req.decoded._id,
-				action: 'Delete',
-				refType: 'Book',
-				refId: req.params.id
-			})
-			res.json({ msg: 'Book deleted' })
+	try{
+		await CloudStorageService.deleteFile(book.fileUrl)
+		await CloudStorageService.deleteFile(book.coverImageUrl)
+		await BookService.delete(req.params.id)
+		await LogService.add({
+			userId: req.decoded._id,
+			action: 'Delete',
+			refType: 'Book',
+			refId: req.params.id,
 		})
-		.catch((err) => {
-			console.log(err)
-			res.status(400).json({ msg: 'Error deleting book'})
-		})
+	}catch(err){
+		console.log(err)
+		res.status(400).json({ msg: 'Error deleting book'})
+	}
 })
 
 export default router
