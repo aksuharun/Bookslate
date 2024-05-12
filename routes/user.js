@@ -46,7 +46,7 @@ router.get('/:id', async (req, res) => {
 			user.password = undefined
 			res.render('data', { data: user })
 		})
-		.catch((err) => res.json(err))
+		.catch((err) => res.status(404).json(err))
 })
 
 router.get('/:id/json', async (req, res) => {
@@ -55,7 +55,7 @@ router.get('/:id/json', async (req, res) => {
 			user.password = undefined
 			res.json(user)
 		})
-		.catch((err) => res.json(err))
+		.catch((err) => res.status(404).json(err))
 })
 
 // Post, Put, Delete Methods
@@ -69,7 +69,7 @@ router.post('/add', isAdmin, async (req, res) => {
 				refType: 'User',
 				refId: user._id
 			})
-			res.json({ msg: 'User added' })
+			res.status(201).json({ msg: 'User added' })
 		})
 		.catch((err) => res.status(500).json(err))
 })
