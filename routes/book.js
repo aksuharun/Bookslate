@@ -1,7 +1,7 @@
 import express from 'express'
 import LogService from '../services/log-service.js'
 import BookService from '../services/book-service.js'
-import CloudStorageService from '../services/cloud-storage-serice.js'
+import CloudStorageService from '../services/cloud-storage-service.js'
 import { isAuthenticated, isAdmin, uploadHandler } from './middleware.js'
 
 const router = express.Router()
@@ -17,7 +17,11 @@ router.get('/all', async (req, res) => {
 		.then(books => {
 			res.render('list', { items: books, itemType:'Book' })
 		})
-		.catch((err) => res.json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(500).json({ msg: 'Error getting books'})
+		
+		})
 })
 
 router.get('/all/json', async (req, res) => {
@@ -25,7 +29,11 @@ router.get('/all/json', async (req, res) => {
 		.then(books => {
 			res.json(books)
 		})
-		.catch((err) => res.json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(500).json({ msg: 'Error getting books'})
+		
+		})
 })
 
 router.get('/update/:id', (req, res) => {
@@ -41,7 +49,11 @@ router.get('/:id', async (req, res) => {
 		.then(book => {
 			res.render('data', { data: book })
 		})
-		.catch((err) => res.json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(404).json({ msg: 'Book not found'})
+		
+		})
 })
 
 router.get('/:id/json', async (req, res) => {
@@ -49,7 +61,11 @@ router.get('/:id/json', async (req, res) => {
 		.then(book => {
 			res.json(book)
 		})
-		.catch((err) => res.json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(404).json({ msg: 'Book not found'})
+		
+		})
 })
 
 // Post, Put, Delete Methods
@@ -88,9 +104,10 @@ router.post('/add', isAdmin, uploadHandler.fields(bookFields), async (req, res) 
 			refType: 'Book',
 			refId: book._id,
 		})
-		res.json({ msg: 'Book added' });
+		res.status(201).json({ msg: 'Book added' });
 	} catch (err) {
-		res.status(400).json(err);
+		console.log(err)
+		res.status(400).json({ msg: 'Error adding book'});
 	}
 });
 
@@ -105,7 +122,11 @@ router.put('/update/:id', isAdmin, async (req, res) => {
 			})
 			res.json({ msg: 'Book updated' })
 		})
-		.catch((err) => res.status(400).json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(400).json({ msg: 'Error updating book'})
+		
+		})
 })
 
 router.delete('/delete/:id', isAdmin, async (req, res) => {
@@ -119,7 +140,10 @@ router.delete('/delete/:id', isAdmin, async (req, res) => {
 			})
 			res.json({ msg: 'Book deleted' })
 		})
-		.catch((err) => res.status(400).json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(400).json({ msg: 'Error deleting book'})
+		})
 })
 
 export default router

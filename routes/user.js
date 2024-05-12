@@ -18,7 +18,10 @@ router.get('/all', async (req, res) => {
 			})
 			res.render('list', { items: users, itemType:'User' })
 		})
-		.catch((err) => res.json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(500).json({ msg: 'Error getting users'})
+		})
 })
 
 router.get('/all/json', async (req, res) => {
@@ -29,7 +32,10 @@ router.get('/all/json', async (req, res) => {
 			})	
 			res.json(users)
 		})
-		.catch((err) => res.json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(500).res.json({ msg: 'Error getting users'})
+		})
 })
 
 router.get('/update/:id', (req, res) => {
@@ -46,7 +52,10 @@ router.get('/:id', async (req, res) => {
 			user.password = undefined
 			res.render('data', { data: user })
 		})
-		.catch((err) => res.status(404).json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(404).json({ msg: 'User not found'})
+		})
 })
 
 router.get('/:id/json', async (req, res) => {
@@ -55,7 +64,10 @@ router.get('/:id/json', async (req, res) => {
 			user.password = undefined
 			res.json(user)
 		})
-		.catch((err) => res.status(404).json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(404).json({ msg: 'User not found'})
+		})
 })
 
 // Post, Put, Delete Methods
@@ -71,7 +83,10 @@ router.post('/add', isAdmin, async (req, res) => {
 			})
 			res.status(201).json({ msg: 'User added' })
 		})
-		.catch((err) => res.status(500).json(err))
+		.catch((err) => {
+			console.log(err)
+			res.status(500).json({ msg: 'Error adding user'})
+		})
 })
 
 router.put('/update/:id', isSelfOrAdmin, async (req, res) => {
@@ -85,7 +100,11 @@ router.put('/update/:id', isSelfOrAdmin, async (req, res) => {
 			})
 			res.json({ msg: 'User updated'})
 		})
-		.catch(err => res.status(500).json(err))
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({ msg: 'Error updating user'})
+		
+		})
 })
 
 router.delete('/:id', isSelfOrAdmin, async (req, res) => {
@@ -99,7 +118,10 @@ router.delete('/:id', isSelfOrAdmin, async (req, res) => {
 			})
 			res.json({ msg: 'User deleted'})
 		})
-		.catch(err => res.status(500).json(err))
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({ msg: 'Error deleting user'})
+		})
 })
 
 export default router
