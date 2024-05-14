@@ -15,42 +15,49 @@ class CloudStorageService{
 		})
 	}
 
-	async downloadFile(src, dest, bucket = this.bucketName) {
+	async downloadFile(filePath, destinationPath, bucketName = this.bucketName) {
 		await this.storage
-			.bucket(bucket)
-			.file(src)
-			.download({ destination: dest })
+			.bucket(bucketName)
+			.file(filePath)
+			.download({ destination: destinationPath })
 	}
 
-	async uploadFile(src, dest, bucket = this.bucketName) {
+	async uploadFile(filePath, destinationPath, bucketName = this.bucketName) {
 		await this.storage
-			.bucket(bucket)
-			.upload(src, { destination: dest })
+			.bucket(bucketName)
+			.upload(filePath, { destination: destinationPath })
 	}
 
-	async uploadFiles(src, files = [], dest, bucket = this.bucketName) {
-		files.forEach(async file => {
-			await this.uploadFile(src + file, dest + file, bucket)
-		})
+	async uploadFiles(filePath, files = [], destinationPath, bucketName = this.bucketName) {
+		await Promise.all(files.map(async file => {
+			await this.uploadFile(filePath + file, destinationPath + file.split('/').pop(), bucketName)
+		}))
 	}
 
-	async moveFile(src, dest, bucket = this.bucketName) {
+	async moveFile(filePath, destinationPath, bucketName = this.bucketName) {
 		await this.storage
-			.bucket(bucket)
-			.file(src)
-			.move(dest)
+			.bucket(bucketName)
+			.file(filePath)
+			.move(destinationPath)
 	}
-	async moveFiles(files = [], dest, bucket = this.bucketName) {
-		files.forEach(async file => {
-			await this.moveFile(file, dest + file.split('/').pop() , bucket)
-		})
+
+	async moveFiles(files = [], destinationPath, bucketName = this.bucketName) {
+		await Promise.all(files.map(async file => {
+			await this.moveFile(file, destinationPath + file.split('/').pop() , bucketName)
+		}))
 	}
 	
-	async deleteFile(src, bucket = this.bucketName) {
+	async deleteFile(filePath, bucketName = this.bucketName) {
 		await this.storage
-		.bucket(bucket)
-		.file(src)
+		.bucket(bucketName)
+		.file(filePath)
 		.delete()
+	}
+
+	async deleteFiles(files = [], bucketName = this.bucketName) {
+		await Promise.all(files.map(async file => {
+			await this.deleteFile(file, bucketName)
+		}))
 	}
 }
 
