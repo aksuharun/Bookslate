@@ -15,8 +15,8 @@ router.get('/login', (req, res) => {
 
 router.post('/signup', async (req, res) => {
 	await UserService.add(req.body)
-		.then(user => {
-			LogService.add({
+		.then(async user => {
+			await LogService.add({
 				userId: user._id,
 				action: 'Signup',
 				refType: 'User',
@@ -29,7 +29,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
 	await UserService.login(req.body)
-		.then(_id => {
+		.then(async _id => {
 			const token = jwt.sign(
 				{ _id }, 
 				process.env.JWT_KEY_SECRET, 
@@ -39,7 +39,7 @@ router.post('/login', async (req, res) => {
 					httpOnly: true, 
 					sameSite: 'strict'
 			})
-			LogService.add({
+			await LogService.add({
 				userId: _id,
 				action: 'login',
 				refType: 'User',
