@@ -1,5 +1,4 @@
 class Service {
-	
 	async add(item){
 		return await this.model.create(item)
 	}
@@ -19,7 +18,6 @@ class Service {
 	async del(id){
 		return await this.model.findByIdAndDelete(id)
 	}
-
 }
 
 export default Service
