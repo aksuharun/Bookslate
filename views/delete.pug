@@ -3,22 +3,13 @@ extends layout
 block content 
 	h2 Delete #{itemType}
 
-	form(method="post")
+	form(method="delete" id="form")
 		label(for="id") #{itemType} ID:
 		br
-		input(type="text" name="id" id="id" required)
+		input(type="text" name="id" id="id" value=id required)
 		br
 		br
 		button(type="submit") Delete #{itemType}
 		p(style="color:#a11; font-weight: 600") This action cannot be undone!
 
-	script.
-		const form = document.querySelector('form')
-		form.addEventListener('submit', async (e) => {
-			e.preventDefault()
-			const id = form.id.value.trim()
-
-			await axios.delete(id, {data: id})
-				.then(console.log)
-				.catch(console.error)
-		})
+	script(src="/script.js")
