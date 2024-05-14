@@ -10,7 +10,6 @@ class Service {
 
 	async find(id){
 		return await this.model.findById(id)
-
 	}
 	
 	async update(id, item){
