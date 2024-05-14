@@ -49,6 +49,17 @@ router.get('/update/:id', async(req, res) => {
 		})
 })
 
+router.get('/cover/:id', isAuthenticated, async (req, res) => {
+	try{
+		const book = await BookService.find(req.params.id)
+		const imageStream =  await CloudStorageService.getFileStream(book.coverImageUrl)
+		imageStream.pipe(res)
+	}catch(err){
+		console.log(err)
+		res.status(404).json({ msg: 'Book not found' })
+	}
+})
+
 router.get('/delete/:id', async (req, res) => {
 	await BookService.find(req.params.id)
 		.then(book => {

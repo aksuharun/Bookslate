@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lily+Script+One&display=swap');
+
+
+:root {
+  --background-color: #F7F4EA;
+	--text-color:#101304;
+  --primary-color: #252507;
+  --secondary-color: #363821;
+  --tertiary-color: #C2AA2D;
+  --accent-color: #BED08A;
+  --danger-light: #EF2929;
+  --danger-dark: #8B1818;
+	
+	--background-color-25:#F7F4EA25; 
+  --background-color-50:#F7F4EA50; 
+  --background-color-75:#F7F4EA75;
+  --background-color-90:#F7F4EA90;
+  
+	--text-color-25: #cccccc; 
+  --text-color-50: #808080;
+  --text-color-75: #404040;
+  --text-color-90: #1a1a1a;
+
+  --primary-color-25: #25250725;
+  --primary-color-50: #25250750;
+  --primary-color-75: #25250775;
+  --primary-color-75: #25250790;
+  }
+
+/* Basic Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Lily Script One', cursive;
+  font-size: 24px;
+  color: var(--text-color);
+	font-weight: 400;
+}
+
+.container {
+	max-width: 1120px;
+	margin: 0 auto;
+	padding: 0 20px;
+}

@@ -59,6 +59,13 @@ class CloudStorageService{
 			await this.deleteFile(file, bucketName)
 		}))
 	}
+
+	async getFileStream(filePath, bucketName = this.bucketName) {
+		return this.storage
+			.bucket(bucketName)
+			.file(filePath)
+			.createReadStream()
+	}
 }
 
 export default new CloudStorageService()
