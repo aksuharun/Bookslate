@@ -1,7 +1,8 @@
+import './config.js'
+
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import dotenv from 'dotenv'
 
 
 import userRouter from './routes/user.js'
@@ -11,7 +12,6 @@ import authRouter from './routes/auth.js'
 import './mongo-connection.js'
 
 
-dotenv.config()
 
 const app = express()
 const port = 3000

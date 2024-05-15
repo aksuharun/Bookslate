@@ -64,7 +64,7 @@ const storage = multer.diskStorage({
 	},
 	filename: function (req, file, cb) {
 		const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-		const ext = file.mimetype.split('/').pop()
+		const ext = file.originalname.split('/')[1]
 		const kebabCase = file.originalname.replace(/\s+/g, '-').toLowerCase().split('.').slice(0, -1)
 		cb(null, kebabCase + '-' + uniqueSuffix + '.' + ext)
 	}
