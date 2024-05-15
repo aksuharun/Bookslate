@@ -1,14 +1,31 @@
 import mongoose from 'mongoose'
 
-async function main(){
-	try{
-		await mongoose.connect('mongodb://localhost:27017/test')
-		console.log('Connected to MongoDB!')
-	}
-	catch(err){
-		console.log('Cannot connect to MongoDB!', err)
-		setTimeout(main, 30000) // Try again in 30 seconds
+const database = 'bookslate'
+
+const uri = `mongodb+srv://userxyz01:${process.env.MONGODB_USER_PASSWORD}@cluster0.cq8ibhd.mongodb.net/${database}?retryWrites=true&w=majority&appName=Cluster0`
+
+const clientOptions = { 
+	serverApi: { 
+		version: '1', 
+		strict: true, 
+		deprecationErrors: true 
 	}
 }
 
-main()
+
+async function run() {
+  try {
+    await mongoose.connect(uri, clientOptions);
+    await mongoose.connection.db.admin().command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } catch (err) {
+		console.log("Error connecting to MongoDB: ", err)
+	}
+	
+}
+run().catch(console.dir);
+
+process.on('SIGINT', async () => {
+	await mongoose.disconnect()
+	process.exit(0)
+})
