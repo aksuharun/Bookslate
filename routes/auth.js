@@ -24,7 +24,10 @@ router.post('/signup', async (req, res) => {
 			})
 			res.json({ msg: 'User Added' })
 		})
-		.catch(err => res.status(500).json({ err: err.message }))
+		.catch(err => {
+			console.log(err)	
+			res.status(500).json({ err: err.message })
+		})
 })
 
 router.post('/login', async (req, res) => {
@@ -47,7 +50,10 @@ router.post('/login', async (req, res) => {
 			})
 			res.json({ msg: 'Logic Success' })
 		})
-		.catch(err => res.status(500).json({ err: err.message }))
+		.catch(err =>{
+			console.log(err)
+			res.status(500).json({ err: err.message })
+	})
 })
 
 router.post('/logout', (req, res) => {
