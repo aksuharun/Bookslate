@@ -29,7 +29,7 @@ function isAdmin (req, res, next) {
 		}
 		const user = await UserService.find(decoded._id)
 		if (user.userRole != 'admin') {
-			console.log('${user._id trying to access admin route}')
+			console.log(`${user._id} trying to access admin route`)
 			return res.status(403).json({ msg: 'Forbidden' })
 		}
 		req.decoded = decoded
