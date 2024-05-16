@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-
 	
 const database = 'bookslate'
 
