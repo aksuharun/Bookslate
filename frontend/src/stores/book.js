@@ -3,12 +3,20 @@ import axios from 'axios'
 
 export const useBookStore = defineStore('book', {
 	state: () => ({
-		books: [],
+		books: {
+			"Beginner": [],
+			"Intermediate": [],
+			"Advanced": [],
+		},
 	}),
 	actions: {
-		async fetchBooks() {
-			const response = await axios.get('http://localhost:3000/book/all/json')
-			this.books = response.data
+		async fetchBooks(level, limit) {
+			try{
+				const response = await axios.get(`http://localhost:3000/book/level/${level}/limit/${limit}`)
+				this.books[level] = response.data
+			} catch (err) {
+				console.error(err)
+			}
 		},
 	},
 })
