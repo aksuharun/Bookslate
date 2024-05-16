@@ -4,7 +4,7 @@ import path from 'path'
 class LocalFileService{
 	async deleteFile(filePath){
 		fs.unlink(filePath, (err) => {
-			if(err) throw err
+			if(err) throw new Error(err)
 		})
 	}
 
