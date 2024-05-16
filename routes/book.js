@@ -95,6 +95,17 @@ router.get('/:id/json', async (req, res) => {
 		})
 })
 
+
+router.get('/level/:level/limit/:limit', async (req, res) => {
+	await BookService.findByField({field: 'level', value: req.params.level.toLowerCase()}, parseInt(req.params.limit))
+		.then(books => {
+			res.status(200).json(books)
+		})
+		.catch((err) => {
+			console.log(err)
+			res.status(500).json({ msg: 'Error getting books'})
+		})
+})
 // Book Fields required for upload and update operations
 const bookFields = [
 	{
@@ -116,7 +127,7 @@ router.post('/add', isAdmin, uploadHandler.fields(bookFields), async (req, res) 
 	try{
 		await CloudStorageService.uploadFiles(
 			'uploads/',
-			[bookFile.filename, coverImageFile.filename],
+			[bookFile.filename, coverImageasdFile.filename],
 			'books/'
 		)
 		await LocalFileService.deleteFiles([bookFile.path, coverImageFile.path])
@@ -136,6 +147,7 @@ router.post('/add', isAdmin, uploadHandler.fields(bookFields), async (req, res) 
 		})
 		res.json({ msg: 'Book added successfully'})
 	}catch(err){
+		await LocalFileService.deleteFiles([bookFile.path, coverImageFile.path])
 		console.log(err)
 		res.status(400).json({ msg: 'Error adding book'})
 	}
@@ -145,9 +157,9 @@ router.put('/update/:id', isAdmin, uploadHandler.fields(bookFields) , async (req
 	const bookFile = req.files['bookFile'] ? req.files['bookFile'][0] : null
 	const coverImageFile = req.files['coverImageFile'] ? req.files['coverImageFile'][0] : null
 	if(!bookFile || !coverImageFile) throw new Error('Files not uploaded')
-	try {
-
-		const book = await BookService.find(req.params.id)
+		try {
+	
+	const book = await BookService.find(req.params.id)
 		await CloudStorageService.deleteFiles(
 			[book.fileUrl, book.coverImageUrl],
 		)
@@ -173,6 +185,7 @@ router.put('/update/:id', isAdmin, uploadHandler.fields(bookFields) , async (req
 		})
 		res.json({ msg: 'Book updated successfully'})
 	}catch(err){
+		await LocalFileService.deleteFiles([bookFile.path, coverImageFile.path])
 		console.log(err)
 		res.status(400).json({ msg: 'Error updating book'})
 	}
