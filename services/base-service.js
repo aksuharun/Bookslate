@@ -11,8 +11,16 @@ class Service {
 		return await this.model.findById(id)
 	}
 
-	async findByField({field, value}, limit){ 
-		return await this.model.find({[field]: value}).limit(limit)
+	async findByField(field, limit){ 
+		return await this.model.find(field).limit(limit)
+	}
+
+	async countByField(field){
+		return await this.model.countDocuments(field)
+	}
+
+	async count(){
+		return await this.model.countDocuments()
 	}
 	
 	async update(id, item){
