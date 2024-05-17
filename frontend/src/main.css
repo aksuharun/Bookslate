@@ -3,7 +3,7 @@
 @import url('./assets/fonts/css/all.css');
 
 :root {
-  --background-color: #F7F4EA;
+  --bg-color: #F7F4EA;  
 	--text-color:#101304;
   --primary-color: #252507;
   --secondary-color: #363821;
@@ -12,25 +12,125 @@
   --danger-light: #EF2929;
   --danger-dark: #8B1818;
 	
-	--background-color-25:#F7F4EA25; 
-  --background-color-50:#F7F4EA50; 
-  --background-color-75:#F7F4EA75;
-  --background-color-90:#F7F4EA90;
+	--bg-color-25: color-mix(in srgb, var(--bg-color) 25%, transparent); 
+  --bg-color-50: color-mix(in srgb, var(--bg-color) 50%, transparent);
+  --bg-color-75: color-mix(in srgb, var(--bg-color) 75%, transparent);;
+  --bg-color-90: color-mix(in srgb, var(--bg-color) 90%, transparent);;
   
-	--text-color-25: #cccccc; 
-  --text-color-50: #808080;
-  --text-color-75: #404040;
-  --text-color-90: #1a1a1a;
+	--text-color-25: color-mix(in srgb, var(--text-color) 25%, transparent); 
+  --text-color-50: color-mix(in srgb, var(--text-color) 50%, transparent);
+  --text-color-75: color-mix(in srgb, var(--text-color) 75%, transparent);
+  --text-color-90: color-mix(in srgb, var(--text-color) 90%, transparent);
 
-  --primary-color-25: #25250725;
-  --primary-color-50: #25250750;
-  --primary-color-75: #25250775;
-  --primary-color-75: #25250790;
-  }
+  --primary-color-25: color-mix(in srgb, var(--primary-color) 25%, transparent);
+  --primary-color-50: color-mix(in srgb, var(--primary-color) 50%, transparent);
+  --primary-color-75: color-mix(in srgb, var(--primary-color) 75%, transparent);
+  --primary-color-90: color-mix(in srgb, var(--primary-color) 90%, transparent);
+  } 
 
-/* Basic Styles */
+
+/* Color Classes */
+.bg-color{
+  background-color: var(--bg-color);
+}
+
+.bg-color-25{
+  background-color: var(--bg-color-25);
+}
+
+.bg-color-50{
+  background-color: var(--bg-color-50);
+}
+
+.bg-color-75{
+  background-color: var(--bg-color-75);
+}
+
+.bg-color-90{
+  background-color: var(--bg-color-90);
+}
+
+.text-color{
+  color: var(--text-color);
+}
+
+.text-color-25{
+  color: var(--text-color-25);
+}
+
+.text-color-50{
+  color: var(--text-color-50);
+}
+
+.text-color-75{
+  color: var(--text-color-75);
+}
+
+.text-color-90{
+  color: var(--text-color-90);
+}
+
+.bg-text-color{
+  background-color: var(--text-color);
+}
+
+.bg-primary-color{
+  background-color: var(--primary-color);
+}
+
+.bg-primary-color-25{
+  background-color: var(--primary-color-25);
+}
+
+.bg-primary-color-50{
+  background-color: var(--primary-color-50);
+}
+
+.bg-primary-color-75{
+  background-color: var(--primary-color-75);
+}
+
+.bg-primary-color-90{
+  background-color: var(--primary-color-90);
+}
+
+.secondary-color{
+  background-color: var(--secondary-color);
+}
+
+.bg-tertiary-color{
+  background-color: var(--tertiary-color);
+}
+
+.bg-accent-color{
+  background-color: var(--accent-color);
+}
+
+.bg-danger-light{
+  background-color: var(--danger-light);
+}
+
+.bg-danger-dark{
+  background-color: var(--danger-dark);
+}
+
+.text-danger-light{
+  color: var(--danger-light);
+}
+
+.text-danger-dark{
+  color: var(--danger-dark);
+}
+
+
+
+/* Global Styles */
+*{
+  margin: 0;
+  padding: 0;
+}
 body {
-  background-color: var(--background-color);
+  background-color: var(--bg-color);
   margin: 0;
   padding: 0;
   display: flex;
@@ -41,16 +141,12 @@ body {
 	width: 1120px;
 }
 
-.section
-
-.section-title{
-  font-family: "Inter", sans-serif;
-  font-size: 20px;
-  font-weight: 600;
-}
-
 .text{
   font-family: "Inter", sans-serif;
   color: var(--text-color);
   font-weight: 400;
+}
+
+.fa-solid{
+  font-size: 1.5rem;
 }
