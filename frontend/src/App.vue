@@ -4,48 +4,44 @@ import { useBookStore } from '@/stores/book'
 
 import Header from './components/header.vue'
 import SectionByLevel from './components/section-by-level.vue'
+import BookDetail from './components/book-detail.vue'
 
 export default {
 	components: {
 		Header,
-		SectionByLevel
-	},
-
-	data() {
-		return {
-			levels : [
-				{id: 0, name: 'Beginner', limit: 6},
-				{id: 1, name: 'Intermediate', limit: 6},
-				{id: 2, name: 'Advanced', limit: 6}
-			],
-			defaultLimit: 6
-		}
-	},
-	
+		SectionByLevel,
+		BookDetail,
+	}, 
 	computed: {
-		filteredLevels() {
-			return this.levels.filter(level => this.books[level.name] && this.books[level.name].length > 0)
-		},
 		...mapStores(useBookStore),
-		...mapState(useBookStore, ['books'])
-	},
-	
-	methods: {
-		fetchBooks(level, limit) {
-			this.bookStore.fetchBooks(level, limit)
+		...mapState(useBookStore, ['books']),
+		getActiveBookLevels() {
+			return this.bookStore.getActiveBookLevels
 		},
-		viewMore(level) {
-			level.limit += this.defaultLimit
-			this.bookStore.fetchBooks(level.name, level.limit)
-		}
+		getBooksByLevel() {
+			return (level) => this.bookStore.getBooksByLevel(level)
+		},
+		getBookLevels() {
+			return this.bookStore.getBookLevels 
+		},
 	},
-	
+	methods: {
+		fetchBooks(level) {
+			this.bookStore.fetchBooks(level)
+		},
+
+		fetchBookCount(level) {
+			this.bookStore.fetchBookCount(level)
+		},
+	},
 	mounted() {
-		this.levels.forEach(level => {
-			this.fetchBooks(level.name, level.limit)
+		this.getBookLevels.forEach(level => {
+			this.fetchBooks(level)
+			this.fetchBookCount(level)
 		})
-	}
+	},
 }
+
 </script>
 
 <template lang="pug">
@@ -53,7 +49,11 @@ export default {
 Header
 
 main(class="main")
-	SectionByLevel(v-for="level in filteredLevels" :key="level.id" :level="level" :books="books" @viewMore="viewMore")
-	
+	SectionByLevel(
+		v-for="level in getActiveBookLevels" 
+		:level="level" 
+		:books="getBooksByLevel(level)" 
+	)
+BookDetail
 
 </template>
