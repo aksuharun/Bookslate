@@ -97,7 +97,11 @@ router.get('/:id/json', async (req, res) => {
 
 
 router.get('/level/:level/limit/:limit', async (req, res) => {
-	await BookService.findByField({field: 'level', value: req.params.level.toLowerCase()}, parseInt(req.params.limit))
+	await BookService.findByField(
+		{ "level": req.params.level.toLowerCase() },
+		parseInt(req.params.limit)
+	)
+		
 		.then(books => {
 			res.status(200).json(books)
 		})
@@ -106,6 +110,14 @@ router.get('/level/:level/limit/:limit', async (req, res) => {
 			res.status(500).json({ msg: 'Error getting books'})
 		})
 })
+
+router.get('/level/:level/count', async (req, res) => {
+	await BookService.countByField({ "level": req.params.level.toLowerCase() })
+		.then(count => {
+			res.status(200).json(count)
+		})
+})
+
 // Book Fields required for upload and update operations
 const bookFields = [
 	{
