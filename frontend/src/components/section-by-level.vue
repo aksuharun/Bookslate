@@ -1,18 +1,35 @@
 <script>
 import BookCard from './book-card.vue';
+import { useBookStore } from '@/stores/book';
 
 export default {
 	name: 'SectionByLevel',
 	props:{
-		level: Object,
-		books: Object
+		level: '',
+		books: [],
+	},
+	data() {
+		return {
+			bookStore: useBookStore(),
+		}
 	},
 	components: {
 		BookCard
 	},
+	computed:{
+		showViewMore() {
+			const levelCount = this.bookStore.bookCount[this.level].count
+			const levelLimit = this.bookStore.bookCount[this.level].limit
+			return levelCount > levelLimit
+		}
+	},
 	methods: {
+		capatilizeFirstLetter(string) {
+			return string.charAt(0).toUpperCase() + string.slice(1);
+		},
+
 		viewMore() {
-			this.$emit('viewMore', this.level)
+			this.bookStore.fetchBooks(this.level)
 		}
 	}
 }
@@ -20,10 +37,10 @@ export default {
 
 <template lang="pug">
 section(class="section")
-	h2(class="section-title") {{ level.name }}
+	h2(class="section-title") {{ capatilizeFirstLetter(level) }}
 	div(class="books grid")
-		BookCard(v-for="book in books[(level.name)]" :key="book._id" :book="book")
-	button(class="view-more") View More
+		BookCard(v-for="book in books" :key="book._id" :book="book")
+	p(class="view-more text" v-if="showViewMore" ) View More
 </template>
 
 
@@ -32,13 +49,23 @@ section(class="section")
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin-top:2rem;
+	align-items: center;
+	margin-top:4rem;
 }
+
+.section-title{
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+	align-self: flex-start;
+}
+
 .books.grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-	grid-auto-rows: 200px; 
-	gap: 32px; 
+	grid-template-columns: repeat(6, 160px);
+	gap: 2rem; 
+
+	margin-top: 1.5rem;
 }
 
 .view-more {
@@ -46,6 +73,15 @@ section(class="section")
 	cursor: pointer;
 	background: none;
 	border: none;
-	font-size: 12px;
+	font-size: .75rem;
+	margin-top: 2rem
+}
+
+.view-more:hover {
+	color: var(--text-color);
+}
+
+.view-more:focus {
+	outline: none;
 }
 </style>

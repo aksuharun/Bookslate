@@ -4,6 +4,12 @@ export default {
 	data() {
 		return {
 			isFocused: false,
+			searchQuery: null,
+		}
+	},
+	computed:{
+		hideSearchIcon() {
+			return this.isFocused || this.searchQuery
 		}
 	}
 }
@@ -11,8 +17,8 @@ export default {
 
 <template lang="pug">
 .search-bar
-	.input-wrapper(:class="{ 'input-focused': isFocused }")
-		input(type="text" v-model="searchQuery" @focus="isFocused = true" @blur="isFocused = false")
+	.input-wrapper(:class="{ 'hide-icon': hideSearchIcon } ")
+		input(type="text" @focus="isFocused = true" @blur="isFocused = false" v-model="searchQuery")
 </template>
 
 <style scoped>
@@ -27,7 +33,7 @@ input {
 	background: none;
 	border: 2px solid var(--text-color);
 	border-radius: 0.5rem;
-	padding: 1px calc(.5rem + 2px); /*add default padding too*/
+	padding: 0 0.5rem; /*add default padding too*/
 }
 
 .input-wrapper::before {
@@ -37,7 +43,7 @@ input {
 	font-size:1rem;
 }
 
-.input-wrapper.input-focused::before {
+.input-wrapper.hide-icon::before {
 	visibility: hidden;
 }
 
