@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 	
 const database = 'bookslate'
 
-const uri = 'mongodb+srv://userxyz01:' + process.env.MONGODB_USER_PASSWORD + '@cluster0.cq8ibhd.mongodb.net/' + database + '?retryWrites=true&w=majority&appName=Cluster0'
+const uri = 'mongodb+srv://' + process.env.MONGODB_USER_NAME  + ':' + process.env.MONGODB_USER_PASSWORD + '@cluster0.cq8ibhd.mongodb.net/' + database + '?retryWrites=true&w=majority&appName=Cluster0'
 
 const clientOptions = { 
 	serverApi: { 
