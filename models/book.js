@@ -18,7 +18,8 @@ const bookSchema = new mongoose.Schema({
 
 	level: {
 		type: String,
-		required: true
+		required: true,
+		set: (value) => value.toLowerCase()
 	},
 
 	coverImageUrl: {
