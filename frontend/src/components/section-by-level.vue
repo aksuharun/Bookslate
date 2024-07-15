@@ -24,22 +24,27 @@ export default {
 		}
 	},
 	methods: {
-		capatilizeFirstLetter(string) {
-			return string.charAt(0).toUpperCase() + string.slice(1);
-		},
-
 		viewMore() {
 			this.bookStore.fetchBooks(this.level)
-		}
+		},
+
+		toggleBookDetail(book) {
+			this.$emit('toggle-book-detail', book)
+		},
 	}
 }
 </script>
 
 <template lang="pug">
 section(class="section")
-	h2(class="section-title") {{ capatilizeFirstLetter(level) }}
+	h2(class="section-title") {{ level }}
 	div(class="books grid")
-		BookCard(v-for="book in books" :key="book._id" :book="book")
+		BookCard(
+			v-for="book in books" 
+			@click="toggleBookDetail(book)"
+			:key="book._id" 
+			:book="book"
+			)
 	p(class="view-more text" v-if="showViewMore" ) View More
 </template>
 
@@ -58,6 +63,7 @@ section(class="section")
   font-size: 20px;
   font-weight: 600;
 	align-self: flex-start;
+	text-transform: capitalize;
 }
 
 .books.grid {
