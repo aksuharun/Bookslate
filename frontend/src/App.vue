@@ -11,7 +11,14 @@ export default {
 		Header,
 		SectionByLevel,
 		BookDetail,
-	}, 
+	},
+
+	data() {
+		return {
+			showBookDetail: false,
+			selectedBook: null,
+		}
+	},
 	computed: {
 		...mapStores(useBookStore),
 		...mapState(useBookStore, ['books']),
@@ -33,6 +40,10 @@ export default {
 		fetchBookCount(level) {
 			this.bookStore.fetchBookCount(level)
 		},
+		toggleBookDetail(book = null) {
+			this.showBookDetail = !this.showBookDetail
+			this.selectedBook = book
+		},
 	},
 	mounted() {
 		this.getBookLevels.forEach(level => {
@@ -52,8 +63,13 @@ main(class="main")
 	SectionByLevel(
 		v-for="level in getActiveBookLevels" 
 		:level="level" 
-		:books="getBooksByLevel(level)" 
+		:books="getBooksByLevel(level)"
+		@toggle-book-detail="toggleBookDetail" 
 	)
-BookDetail
+	BookDetail(
+		v-if="showBookDetail"
+		:book="selectedBook"
+		@toggle-book-detail="toggleBookDetail" 
+	)
 
 </template>
