@@ -1,4 +1,6 @@
 import express from 'express'
+import fs from 'fs'
+import path from 'path'
 import LogService from '../services/log-service.js'
 import BookService from '../services/book-service.js'
 import CloudStorageService from '../services/cloud-storage-service.js'
@@ -49,12 +51,17 @@ router.get('/update/:id', async(req, res) => {
 		})
 })
 
-router.get('/cover/:id', isAuthenticated, async (req, res) => {
-	try{
+router.get('/cover/:id', async (req, res) => {
+	try {
 		const book = await BookService.find(req.params.id)
-		const imageStream =  await CloudStorageService.getFileStream(book.coverImageUrl)
-		imageStream.pipe(res)
-	}catch(err){
+		if (!book || !book.coverImageUrl) {
+			throw new Error('Cover image not found')
+		}
+		const imagePath = path.resolve(book.coverImageUrl)
+		const readStream = fs.createReadStream(imagePath)
+		res.setHeader('Content-Type', 'image/jpeg') 
+		readStream.pipe(res)
+	} catch (err) {
 		console.log(err)
 		res.status(404).json({ msg: 'Book not found' })
 	}
@@ -100,9 +107,8 @@ router.get('/level/:level/limit/:limit', async (req, res) => {
 	await BookService.findByField(
 		{ "level": req.params.level.toLowerCase() },
 		parseInt(req.params.limit)
-	)
-		
-		.then(books => {
+	).then(books => {
+		console.log(books)
 			res.status(200).json(books)
 		})
 		.catch((err) => {
@@ -137,20 +143,15 @@ router.post('/add', isAdmin, uploadHandler.fields(bookFields), async (req, res) 
 	const coverImageFile = req.files['coverImageFile'] ? req.files['coverImageFile'][0] : null
 	if(!bookFile || !coverImageFile) throw new Error('Files not uploaded')
 	try{
-		await CloudStorageService.uploadFiles(
-			'uploads/',
-			[bookFile.filename, coverImageasdFile.filename],
-			'books/'
-		)
-		await LocalFileService.deleteFiles([bookFile.path, coverImageFile.path])
 		const book = await BookService.add({
 			title: req.body.title,
 			author: req.body.author,
-			language: req.body.language,
 			level: req.body.level,
-			fileUrl: 'books/' + bookFile.filename,
-			coverImageUrl: 'books/' + coverImageFile.filename,
+			language: req.body.language,
+			fileUrl: 'books/epubs/' + bookFile.filename,
+			coverImageUrl: 'books/covers/' + coverImageFile.filename,
 		})
+
 		await LogService.add({
 			userId: req.decoded._id,
 			action: 'Add',
@@ -170,32 +171,22 @@ router.put('/update/:id', isAdmin, uploadHandler.fields(bookFields) , async (req
 	const coverImageFile = req.files['coverImageFile'] ? req.files['coverImageFile'][0] : null
 	if(!bookFile || !coverImageFile) throw new Error('Files not uploaded')
 		try {
-	
-	const book = await BookService.find(req.params.id)
-		await CloudStorageService.deleteFiles(
-			[book.fileUrl, book.coverImageUrl],
-		)
-		await CloudStorageService.uploadFiles(
-			'uploads/',
-			[bookFile.filename, coverImageFile.filename],
-			'books/'
-		)
-		await LocalFileService.deleteFiles([bookFile.path, coverImageFile.path])
-		await BookService.update(req.params.id, {
-			title: req.body.title,
-			author: req.body.author,
-			language: req.body.language,
-			level: req.body.level,
-			fileUrl: 'books/' + bookFile.filename,
-			coverImageUrl: 'books/' + coverImageFile.filename,
-		})
-		await LogService.add({
-			userId: req.decoded._id,
-			action: 'Update',
-			refType: 'Book',
-			refId: book._id,
-		})
-		res.json({ msg: 'Book updated successfully'})
+			await BookService.update(req.params.id, {
+				title: req.body.title,
+				author: req.body.author,
+				level: req.body.level,
+				language: req.body.language,
+				fileUrl: 'books/epubs/' + bookFile.filename,
+				coverImageUrl: 'books/covers/' + coverImageFile.filename,
+			})
+
+			await LogService.add({
+				userId: req.decoded._id,
+				action: 'Update',
+				refType: 'Book',
+				refId: req.params.id,
+			})
+			res.json({ msg: 'Book updated successfully'})
 	}catch(err){
 		await LocalFileService.deleteFiles([bookFile.path, coverImageFile.path])
 		console.log(err)
@@ -206,7 +197,7 @@ router.put('/update/:id', isAdmin, uploadHandler.fields(bookFields) , async (req
 router.delete('/delete/:id', isAdmin, async (req, res) => {
 	try{
 		const book = await BookService.find(req.params.id)
-		await CloudStorageService.deleteFiles([book.fileUrl, book.coverImageUrl])
+		await LocalFileService.deleteFiles([book.fileUrl, book.coverImageUrl])
 		await BookService.del(req.params.id)
 		await LogService.add({
 			userId: req.decoded._id,

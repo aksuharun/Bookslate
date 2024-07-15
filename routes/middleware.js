@@ -27,11 +27,14 @@ function isAdmin (req, res, next) {
 		if (err) {
 			return res.status(401).json({ msg: 'Unauthorized' })
 		}
-		const user = await UserService.find(decoded._id)
-		if (user.userRole != 'admin') {
-			console.log(`${user._id} trying to access admin route`)
-			return res.status(403).json({ msg: 'Forbidden' })
-		}
+		await UserService.find(decoded._id)
+			.then(user => {
+				console.log(user)
+				if (user.userRole != 'admin') {
+					console.log(`${user._id} trying to access admin route`)
+					res.status(403).json({ msg: 'Forbidden' })
+				}
+			})
 		req.decoded = decoded
 		next()
 	})
@@ -48,7 +51,7 @@ function isSelfOrAdmin (req, res, next) {
 			return res.status(401).json({ msg: 'Unauthorized' })
 		}
 		const user = await UserService.find(decoded._id)
-		if (user.userRole != 'admin' && user._id != req.body._id) {
+		if (user.userRole != 'admin' && user._id != req.params.id) {
 			return res.status(403).json({ msg: 'Forbidden' })
 		}
 		req.decoded = decoded
@@ -56,11 +59,12 @@ function isSelfOrAdmin (req, res, next) {
 	})
 }
 
-multer({ dest: 'uploads/' })
-
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		cb(null, 'uploads/')
+		if(file.fieldname == 'coverImageFile')
+			cb(null, 'books/covers/')
+		else if(file.fieldname == 'bookFile')
+			cb(null, 'books/epubs/')
 	},
 	filename: function (req, file, cb) {
 		const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
