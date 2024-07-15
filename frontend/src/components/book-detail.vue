@@ -1,61 +1,135 @@
 <script>
 export default {
-	name: 'BookDetail'
+	name: 'BookDetail',
+	props: {
+		book: Object
+	},
+	data() {
+		return {
+			isBookDetailVisible: true,
+		}
+	},
+	methods: {
+		toggleBookDetail(event) {
+			this.$emit('toggle-book-detail')
+		}
+	}
 }
 </script>
 
 <template lang="pug">
-main(class="main")
-	div(class="blur-layer")
-		section(class="book-detail bg-color")
-			h2(class="text") The Happy Prince and The Selfish Giant
-			i(class="fa-solid fa-xmark text-color")
-			img(src="https://www.blackcat-cideb.com/uploads/2020/02/20027_COVER_The-Happy-Prince_22b4e996abff550c7150b210f52b9c20.jpg")
-			ul
-				li(class="text")
-					p 
-						strong Title: 
-						| The Happy Prince and The Selfish Giant
-					p 
-						strong Author: 
-						| Oscar Wilde
-					p 
-						strong Level: 
-						| Beginner
-			button Start Reading
+div(
+	class="blurLayer"
+	v-show="isBookDetailVisible"
+	@click.self="toggleBookDetail"
+	)
+	article(class="bookDetail")
+		header(class="bookDetail-header")
+			h2(class="bookDetail-heading text") The Happy Prince and The Selfish Giant
+			i(
+				class="icon icon--primary fa-solid fa-xmark"
+				@click.self="toggleBookDetail"
+			)
+		div(class="bookDetail-body")
+			img(
+				class="coverImage"
+				src="https://www.blackcat-cideb.com/uploads/2020/02/20027_COVER_The-Happy-Prince_22b4e996abff550c7150b210f52b9c20.jpg"
+			)
+			div(class="bookDetail-content")
+				ul
+					li(class="text")
+						strong Title:&nbsp;
+						| {{ book.title }}
+					li(class="text")
+						strong Author:&nbsp;
+						| {{ book.author }}
+					li(class="text")
+						strong Level:&nbsp;
+						| {{ book.level }}
+				button(class="button button--dark") Start Reading
 </template>
 
 <style scoped>
 
-.blur-layer {
+.blurLayer {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
 	position: absolute;
 	top: 0;
 	left: 0;
-	
 	width: 100vw;
 	height: 100vh;
 	background-color: rgba(0, 0, 0, 0.5);
-	backdrop-filter: blur(8px);
+	backdrop-filter: blur(.5rem);
 }
 
-.book-detail {
-	width: 46rem;
-	height: 25rem;
-	border-radius: 4px;
+.bookDetail {
+	width: 40rem;
+	height: 21rem;
+	border-radius: .25rem;
+	background-color:var(--bg-color);
+	padding: 2rem 2rem 2rem 4rem;
 }
 
-h2 {
+.bookDetail-header {
+	display: flex;
+ 	justify-content: space-between;
+}
+
+.bookDetail-heading {
+	font-size: 1.5rem;
 	font-weight: 600;
+	padding-top: .5rem;
+}
+
+.fa-xmark {
+	cursor: pointer;
+}
+
+.bookDetail-body{
+	display: flex;
+	margin-top: 1.5rem;
+}
+
+.coverImage {
+	width: 11.25rem;
+	max-height: 16rem;
+}
+
+.bookDetail-content {
+	display: flex;
+	flex-direction: column;
+	margin: 2rem 0 0 2rem;
+	width: 26rem;
+	height: 15rem;
+}
+
+
+ul {
+	margin-bottom: auto;
 }
 li {
 	list-style-type: none;
+	color: var(--text-color-75);
+	font-size: 1.125rem; /* 18px */
+}
+
+li:not(:last-child) {
+	margin-bottom: .5rem;
+}
+
+li:last-of-type {
+	text-transform: capitalize;
 }
 
 strong{
 	font-weight: 500;
+	color: var(--text-color);
 }
+
+.button {
+	align-self: flex-end;
+}
+
 </style>
