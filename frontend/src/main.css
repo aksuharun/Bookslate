@@ -45,13 +45,25 @@ body {
 	width: 1120px;
 }
 
-.text{
+.text, .descriptionTitle{
   font-family: "Inter", sans-serif;
-  color: var(--text-color);
+  color: var(--text-color)
 }
 
-.fa-solid{
+.icon {
   font-size: 1.5rem;
+}
+
+.icon--primary {
+  color: var(--primary-color);
+}
+
+.icon--danger--light {
+  color: var(--danger-light);
+}
+
+.icon--danger--dark {
+  color: var(--danger-dark);
 }
 
 .button{
