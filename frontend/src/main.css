@@ -27,103 +27,7 @@
   --primary-color-75: color-mix(in srgb, var(--primary-color) 75%, transparent);
   --primary-color-90: color-mix(in srgb, var(--primary-color) 90%, transparent);
   } 
-
-
-/* Color Classes */
-.bg-color{
-  background-color: var(--bg-color);
-}
-
-.bg-color-25{
-  background-color: var(--bg-color-25);
-}
-
-.bg-color-50{
-  background-color: var(--bg-color-50);
-}
-
-.bg-color-75{
-  background-color: var(--bg-color-75);
-}
-
-.bg-color-90{
-  background-color: var(--bg-color-90);
-}
-
-.text-color{
-  color: var(--text-color);
-}
-
-.text-color-25{
-  color: var(--text-color-25);
-}
-
-.text-color-50{
-  color: var(--text-color-50);
-}
-
-.text-color-75{
-  color: var(--text-color-75);
-}
-
-.text-color-90{
-  color: var(--text-color-90);
-}
-
-.bg-text-color{
-  background-color: var(--text-color);
-}
-
-.bg-primary-color{
-  background-color: var(--primary-color);
-}
-
-.bg-primary-color-25{
-  background-color: var(--primary-color-25);
-}
-
-.bg-primary-color-50{
-  background-color: var(--primary-color-50);
-}
-
-.bg-primary-color-75{
-  background-color: var(--primary-color-75);
-}
-
-.bg-primary-color-90{
-  background-color: var(--primary-color-90);
-}
-
-.secondary-color{
-  background-color: var(--secondary-color);
-}
-
-.bg-tertiary-color{
-  background-color: var(--tertiary-color);
-}
-
-.bg-accent-color{
-  background-color: var(--accent-color);
-}
-
-.bg-danger-light{
-  background-color: var(--danger-light);
-}
-
-.bg-danger-dark{
-  background-color: var(--danger-dark);
-}
-
-.text-danger-light{
-  color: var(--danger-light);
-}
-
-.text-danger-dark{
-  color: var(--danger-dark);
-}
-
-
-
+  
 /* Global Styles */
 *{
   margin: 0;
@@ -144,9 +48,27 @@ body {
 .text{
   font-family: "Inter", sans-serif;
   color: var(--text-color);
-  font-weight: 400;
 }
 
 .fa-solid{
   font-size: 1.5rem;
+}
+
+.button{
+  font-family: "Inter", sans-serif;
+  font-size: 1.125rem; /* 18px */
+  padding: .75rem 1rem;
+  border: none;
+  border-radius: .25rem;
+  cursor: pointer;
+}
+
+.button--dark{
+  background-color: var(--primary-color);
+  color: var(--bg-color);
+}
+
+.coverImage {
+  border-radius: .25rem;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, .25);
 }
