@@ -3,7 +3,6 @@ import fs from 'fs'
 import path from 'path'
 import LogService from '../services/log-service.js'
 import BookService from '../services/book-service.js'
-import CloudStorageService from '../services/cloud-storage-service.js'
 import LocalFileService from '../services/local-file-service.js'
 import { isAuthenticated, isAdmin, uploadHandler } from './middleware.js'
 
