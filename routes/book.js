@@ -40,7 +40,6 @@ router.get('/all/json', async (req, res) => {
 router.get('/update/:id', async(req, res) => {
 	await BookService.find(req.params.id)
 		.then(book => {
-			console.log(book)
 			res.render('update-book', { book: book })
 		})
 		.catch((err) => {
@@ -107,7 +106,6 @@ router.get('/level/:level/limit/:limit', async (req, res) => {
 		{ "level": req.params.level.toLowerCase() },
 		parseInt(req.params.limit)
 	).then(books => {
-		console.log(books)
 			res.status(200).json(books)
 		})
 		.catch((err) => {
