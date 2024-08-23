@@ -5,6 +5,7 @@ import LogService from '../services/log-service.js'
 import BookService from '../services/book-service.js'
 import LocalFileService from '../services/local-file-service.js'
 import { isAuthenticated, isAdmin, uploadHandler } from './middleware.js'
+import {EPub} from 'epub2'
 
 const router = express.Router()
 
@@ -119,6 +120,38 @@ router.get('/level/:level/count', async (req, res) => {
 		.then(count => {
 			res.status(200).json(count)
 		})
+})
+
+router.get('/epub/:id', async (req, res) => {
+	try {
+		const book = await BookService.find(req.params.id)
+		if (!book || !book.fileUrl) {
+			throw new Error('Book not found')
+		}		
+		var html
+		EPub.createAsync(`./${book.fileUrl}`, null, '')
+		.then(epub => {
+			html = epub.flow
+			console.log('test')
+			.filter((chapter) => chapter.id.includes('item'))
+			.map(chapter => {
+				return new Promise((resolve, reject) => {
+					epub.getChapter(chapter.id, (err, text) => {
+						if(err) return reject(err)
+						resolve(text)
+					})
+				})
+			})
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(404).json({ msg: 'Error reading book'})
+		})
+		res.send(html)
+	}
+	catch (err) {
+		res.status(404).json({ msg: 'Book not found' })
+	}
 })
 
 // Book Fields required for upload and update operations

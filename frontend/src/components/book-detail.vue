@@ -1,4 +1,6 @@
 <script>
+import router from '../router/index.js'
+
 export default {
 	name: 'BookDetail',
 	props: {
@@ -12,6 +14,9 @@ export default {
 	methods: {
 		toggleBookDetail(event) {
 			this.$emit('toggle-book-detail')
+		},
+		startReading() {
+			this.$router.push(`/read/${this.book._id}`)
 		}
 	}
 }
@@ -33,7 +38,7 @@ div(
 		div(class="bookDetail-body")
 			img(
 				class="coverImage"
-				src="https://www.blackcat-cideb.com/uploads/2020/02/20027_COVER_The-Happy-Prince_22b4e996abff550c7150b210f52b9c20.jpg"
+				:src="'http://localhost:3000/book/cover/' + book._id"
 			)
 			div(class="bookDetail-content")
 				ul
@@ -46,7 +51,7 @@ div(
 					li(class="text")
 						strong Level:&nbsp;
 						| {{ book.level }}
-				button(class="button button--dark") Start Reading
+				button(class="button button--dark" @click="startReading") Start Reading
 </template>
 
 <style scoped>
@@ -65,8 +70,8 @@ div(
 }
 
 .bookDetail {
-	width: 40rem;
-	height: 21rem;
+	width: 46rem;
+	height: 25rem;
 	border-radius: .25rem;
 	background-color:var(--bg-color);
 	padding: 2rem 2rem 2rem 4rem;

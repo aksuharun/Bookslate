@@ -1,5 +1,7 @@
-.vscode/
 node_modules/
 uploads/
 secrets/
+.vscode/
+
+.DS_Store
 .env

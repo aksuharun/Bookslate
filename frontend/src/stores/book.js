@@ -3,6 +3,7 @@ import axios from 'axios'
 
 export const useBookStore = defineStore('book', {
 	state: () => ({
+		book: {},
 		books: [],
 		bookCount: {
 			beginner: { count: 0, limit: 0 },
@@ -12,6 +13,9 @@ export const useBookStore = defineStore('book', {
 		defaultLimit: 6
 	}),
 	getters: {
+		getBook: (state) => {
+			return state.book
+		},
 		getBooksByLevel: (state) => (level) =>{
 			return state.books.filter(book => book.level == level)
 		},
@@ -26,6 +30,14 @@ export const useBookStore = defineStore('book', {
 	},
 
 	actions: {
+		async fetchBook(id) {
+			try{
+				const response = await axios.get(`http://localhost:3000/book/${id}/json`)
+				this.book = response.data
+			} catch (err) {
+				console.error(err)
+			}
+		},
 		async fetchBooks(level, limit = this.defaultLimit) {
 			try{
 				const response = await axios.get(`http://localhost:3000/book/level/${level}/limit/${limit}`)
@@ -42,6 +54,15 @@ export const useBookStore = defineStore('book', {
 				this.bookCount[level].count = response.data
 			} catch (err) {
 				console.error(err)
+			}
+		},
+
+		clearStore() {
+			this.books = []
+			this.bookCount = {
+				beginner: { count: 0, limit: 0 },
+				intermediate: { count: 0, limit: 0 },
+				advanced: { count: 0, limit: 0 }
 			}
 		}
 	},
