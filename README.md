@@ -2,6 +2,8 @@
 
 Bookslate is an innovative e-book application designed to accelerate the language learning process. It allows users to read books in their target language while providing instant translations and pronunciations for unfamiliar words.
 
+**Note: This project is currently in active development and is not yet ready for production use.**
+
 ![bookslate-main-page-1](https://github.com/user-attachments/assets/e5d2fb27-0116-40d7-899d-dcf495489cd1)
 ![bookslate-reading-page-translation-pop-up-1](https://github.com/user-attachments/assets/3a83f6ce-a771-4b5d-9fd4-0ba9f79fce4f)
 
@@ -11,6 +13,8 @@ Bookslate is an innovative e-book application designed to accelerate the languag
 - **Audio Pronunciation**: Listen to the correct pronunciation of words to improve your speaking skills.
 - **Word Saving**: Save unfamiliar words to your "Saved Words" list for later review.
 - **Seamless Reading Experience**: Enjoy reading while learning, without leaving the application.
+
+Please note that as the project is still in development, features may be incomplete or subject to change.
 
 ## Technology Stack
 
@@ -85,8 +89,6 @@ Please note that while everyone is welcome to contribute or use this project, co
 ## Contact
 
 Harun AKSU - harun16aksu@gmail.com
-
-Project Link: [https://github.com/aksuharun/Bookslate](https://github.com/aksuharun/Bookslate)
 
 ## License
 
