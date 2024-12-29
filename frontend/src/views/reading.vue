@@ -2,7 +2,7 @@
 import { mapStores, mapState } from 'pinia'
 import { useBookStore } from '@/stores/book'
 export default {
-	name: "Book",
+	name: "ReadingPage",
 	computed: {
 		...mapStores(useBookStore),
 		...mapState(useBookStore, ['books']),
