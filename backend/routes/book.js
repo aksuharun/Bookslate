@@ -92,12 +92,14 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/json', async (req, res) => {
 	await BookService.find(req.params.id)
 		.then(book => {
+			if (!book) {
+				return res.status(404).json({ msg: 'Book not found'})
+			}
 			res.json(book)
 		})
 		.catch((err) => {
 			console.log(err)
 			res.status(404).json({ msg: 'Book not found'})
-		
 		})
 })
 
