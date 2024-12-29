@@ -4,7 +4,10 @@ import router from '../router/index.js'
 export default {
 	name: 'BookDetail',
 	props: {
-		book: Object
+		book: {
+			type: Object,
+			required: true
+		}
 	},
 	data() {
 		return {
@@ -30,7 +33,7 @@ div(
 	)
 	article(class="bookDetail")
 		header(class="bookDetail-header")
-			h2(class="bookDetail-heading text") The Happy Prince and The Selfish Giant
+			h2(class="bookDetail-heading text") {{ book.title }}
 			i(
 				class="icon icon--primary fa-solid fa-xmark"
 				@click.self="toggleBookDetail"
@@ -39,6 +42,8 @@ div(
 			img(
 				class="coverImage"
 				:src="'http://localhost:3000/book/cover/' + book._id"
+				loading="lazy"
+				alt="Book Cover"
 			)
 			div(class="bookDetail-content")
 				ul
