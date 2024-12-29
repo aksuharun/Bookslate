@@ -34,6 +34,6 @@ const logSchema = new mongoose.Schema({
 
 logSchema.plugin(autopopulate)
 
-const LogModel =  mongoose.model('Log', logSchema)
+const LogModel =	mongoose.model('Log', logSchema)
 
 export default LogModel

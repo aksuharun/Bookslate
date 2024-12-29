@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 
 const readingProcessSchema = new mongoose.Schema({
