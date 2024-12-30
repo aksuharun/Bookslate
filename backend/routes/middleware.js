@@ -24,19 +24,28 @@ function isAdmin (req, res, next) {
 	}
 	
 	jwt.verify(token, process.env.JWT_KEY_SECRET, async (err, decoded) => {
-		if (err) {
-			return res.status(401).json({ msg: 'Unauthorized' })
+		try {
+			if (err) {
+				return res.status(401).json({ msg: 'Unauthorized' })
+			}
+			
+			const user = await UserService.find(decoded._id)
+			if (!user) {
+				return res.status(404).json({ msg: 'User not found' })
+			}
+			
+			if (user.userRole !== 'admin') {
+				// Log attempt without exposing user ID
+				console.warn('Non-admin user attempted to access admin route')
+				return res.status(403).json({ msg: 'Forbidden' })
+			}
+			
+			req.decoded = decoded
+			next()
+		} catch (error) {
+			console.error('Admin authentication error:', error.message)
+			return res.status(500).json({ msg: 'Internal server error' })
 		}
-		await UserService.find(decoded._id)
-			.then(user => {
-				console.log(user)
-				if (user.userRole != 'admin') {
-					console.warn(`${user._id} trying to access admin route`)
-					res.status(403).json({ msg: 'Forbidden' })
-				}
-			})
-		req.decoded = decoded
-		next()
 	})
 }
 
@@ -47,15 +56,27 @@ function isSelfOrAdmin (req, res, next) {
 	}
 
 	jwt.verify(token, process.env.JWT_KEY_SECRET, async (err, decoded) => {
-		if (err) {
-			return res.status(401).json({ msg: 'Unauthorized' })
+		try {
+			if (err) {
+				return res.status(401).json({ msg: 'Unauthorized' })
+			}
+
+			const user = await UserService.find(decoded._id)
+			if (!user) {
+				return res.status(404).json({ msg: 'User not found' })
+			}
+
+			if (user.userRole !== 'admin' && user._id != req.params.id) {
+				console.warn('Unauthorized access attempt to protected resource')
+				return res.status(403).json({ msg: 'Forbidden' })
+			}
+
+			req.decoded = decoded
+			next()
+		} catch (error) {
+			console.error('Authentication error:', error.message)
+			return res.status(500).json({ msg: 'Internal server error' })
 		}
-		const user = await UserService.find(decoded._id)
-		if (user.userRole != 'admin' && user._id != req.params.id) {
-			return res.status(403).json({ msg: 'Forbidden' })
-		}
-		req.decoded = decoded
-		next()
 	})
 }
 
