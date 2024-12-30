@@ -7,6 +7,8 @@ import cors from 'cors'
 import userRouter from './routes/user.js'
 import bookRouter from './routes/book.js'
 import authRouter from './routes/auth.js'
+import errorHandler from './errors/error-handler.js'
+import { NotFoundError } from './errors/api-errors.js'
 
 import './mongo-connection.js'
 
@@ -26,6 +28,16 @@ app.use('/auth', authRouter)
 
 app.get('/', (req, res) => {
 	res.send('hello')
+})
+
+// 404 handler for undefined routes
+app.use((req, res, next) => {
+	next(new NotFoundError('Route not found'))
+})
+
+// Global error handler
+app.use((err, req, res, next) => {
+	errorHandler(err, req, res)
 })
 
 if (process.env.NODE_ENV !== 'test') {

@@ -1,16 +1,20 @@
 import jwt from 'jsonwebtoken'
 import UserService from '../services/user-service.js'
 import multer from 'multer'
+import { UnauthorizedError, ForbiddenError, NotFoundError, InternalServerError } from '../errors/api-errors.js'
+import BaseError from '../errors/base-error.js'
 
 function isAuthenticated (req, res, next) {
 	const token = req.cookies.token
 	if (!token) {
-		return res.status(401).json({ msg: 'Token is missing' })
+		next(new UnauthorizedError('Token is missing'))
+		return
 	}
 
 	jwt.verify(token, process.env.JWT_KEY_SECRET, (err, decoded) => {
 		if (err) {
-			return res.status(401).json({ msg: 'Unauthorized' })
+			next(new UnauthorizedError('Invalid token'))
+			return
 		}
 		req.decoded = decoded
 		next()
@@ -20,31 +24,35 @@ function isAuthenticated (req, res, next) {
 function isAdmin (req, res, next) {
 	const token = req.cookies.token
 	if (!token) {
-		return res.status(401).json({ msg: 'Token is missing' })
+		next(new UnauthorizedError('Token is missing'))
+		return
 	}
 	
 	jwt.verify(token, process.env.JWT_KEY_SECRET, async (err, decoded) => {
 		try {
 			if (err) {
-				return res.status(401).json({ msg: 'Unauthorized' })
+				throw new UnauthorizedError('Invalid token')
 			}
 			
 			const user = await UserService.find(decoded._id)
 			if (!user) {
-				return res.status(404).json({ msg: 'User not found' })
+				throw new NotFoundError('User not found')
 			}
 			
 			if (user.userRole !== 'admin') {
-				// Log attempt without exposing user ID
 				console.warn('Non-admin user attempted to access admin route')
-				return res.status(403).json({ msg: 'Forbidden' })
+				throw new ForbiddenError('Admin access required')
 			}
 			
 			req.decoded = decoded
 			next()
 		} catch (error) {
+			if (error instanceof BaseError) {
+				next(error)
+				return
+			}
 			console.error('Admin authentication error:', error.message)
-			return res.status(500).json({ msg: 'Internal server error' })
+			next(new InternalServerError())
 		}
 	})
 }
@@ -52,30 +60,35 @@ function isAdmin (req, res, next) {
 function isSelfOrAdmin (req, res, next) {
 	const token = req.cookies.token
 	if (!token) {
-		return res.status(401).json({ msg: 'Token is missing' })
+		next(new UnauthorizedError('Token is missing'))
+		return
 	}
 
 	jwt.verify(token, process.env.JWT_KEY_SECRET, async (err, decoded) => {
 		try {
 			if (err) {
-				return res.status(401).json({ msg: 'Unauthorized' })
+				throw new UnauthorizedError('Invalid token')
 			}
 
 			const user = await UserService.find(decoded._id)
 			if (!user) {
-				return res.status(404).json({ msg: 'User not found' })
+				throw new NotFoundError('User not found')
 			}
 
 			if (user.userRole !== 'admin' && user._id != req.params.id) {
 				console.warn('Unauthorized access attempt to protected resource')
-				return res.status(403).json({ msg: 'Forbidden' })
+				throw new ForbiddenError('Access denied')
 			}
 
 			req.decoded = decoded
 			next()
 		} catch (error) {
+			if (error instanceof BaseError) {
+				next(error)
+				return
+			}
 			console.error('Authentication error:', error.message)
-			return res.status(500).json({ msg: 'Internal server error' })
+			next(new InternalServerError())
 		}
 	})
 }
@@ -96,6 +109,5 @@ const storage = multer.diskStorage({
 })
 
 const uploadHandler = multer({ storage: storage })
-
 
 export { isAuthenticated, isAdmin, isSelfOrAdmin, uploadHandler }
