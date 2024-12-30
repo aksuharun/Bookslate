@@ -1,8 +1,15 @@
 <script>
 export default {
 	name: 'BookCard',
-	props:{
-		book: Object
+	props: {
+		book: {
+			type: Object,
+			required: true,
+			default: () => ({
+				_id: '',
+				title: ''
+			})
+		}
 	}
 }
 </script>

@@ -19,6 +19,7 @@
 		"indent": ["error", "tab"],
 		"semi": ["error", "never"],
 		"quotes": ["error", "single"],
+		"object-curly-spacing": ["error", "always"],
 		"vue/html-indent": ["error", "tab"],
 		"vue/script-indent": ["error", "tab"],
 		"no-unused-vars": "warn",

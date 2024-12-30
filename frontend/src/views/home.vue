@@ -2,13 +2,13 @@
 import { mapState, mapStores } from 'pinia'
 import { useBookStore } from '@/stores/book'
 
-import Header from '../components/header.vue'
+import AppHeader from '../components/header.vue'
 import SectionByLevel from '../components/section-by-level.vue'
 import BookDetail from '../components/book-detail.vue'
 
 export default {
 	components: {
-		Header,
+		AppHeader,
 		SectionByLevel,
 		BookDetail,
 	},
@@ -33,6 +33,15 @@ export default {
 			return this.bookStore.getBookLevels 
 		},
 	},
+	mounted() {
+		this.getBookLevels.forEach(level => {
+			this.fetchBooks(level)
+			this.fetchBookCount(level)
+		})
+	},
+	unmounted() {
+		this.bookStore.clearBooks()
+	},
 	methods: {
 		fetchBooks(level) {
 			this.bookStore.fetchBooks(level)
@@ -46,22 +55,12 @@ export default {
 			this.selectedBook = book
 		},
 	},
-	mounted() {
-		this.getBookLevels.forEach(level => {
-			this.fetchBooks(level)
-			this.fetchBookCount(level)
-		})
-	},
-	unmounted() {
-		this.bookStore.clearBooks()
-	},
 }
 
 </script>
 
 <template lang="pug">
-
-Header
+AppHeader
 
 main(class="main")
 	SectionByLevel(

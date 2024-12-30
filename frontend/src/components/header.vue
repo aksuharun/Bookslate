@@ -1,8 +1,8 @@
 <script>
-import AppLogo from './app-logo.vue';
-import SearchBar from './search-bar.vue';
+import AppLogo from './app-logo.vue'
+import SearchBar from './search-bar.vue'
 export default {
-	name: 'Header',
+	name: 'AppHeader',
 	components: {
 		AppLogo,
 		SearchBar

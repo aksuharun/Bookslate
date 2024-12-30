@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const HomeView = () => import('../views/home.vue')
 const ReadingPage = () => import('../views/reading.vue')

@@ -1,6 +1,4 @@
 <script>
-import router from '../router/index.js'
-
 export default {
 	name: 'BookDetail',
 	props: {
@@ -9,13 +7,14 @@ export default {
 			required: true
 		}
 	},
+	emits: ['toggle-book-detail'],
 	data() {
 		return {
 			isBookDetailVisible: true,
 		}
 	},
 	methods: {
-		toggleBookDetail(event) {
+		toggleBookDetail() {
 			this.$emit('toggle-book-detail')
 		},
 		startReading() {
@@ -60,7 +59,6 @@ div(
 </template>
 
 <style scoped>
-
 .blurLayer {
 	display: flex;
 	justify-content: center;
@@ -78,13 +76,13 @@ div(
 	width: 46rem;
 	height: 25rem;
 	border-radius: .25rem;
-	background-color:var(--bg-color);
+	background-color: var(--bg-color);
 	padding: 2rem 2rem 2rem 4rem;
 }
 
 .bookDetail-header {
 	display: flex;
- 	justify-content: space-between;
+	justify-content: space-between;
 }
 
 .bookDetail-heading {
@@ -97,7 +95,7 @@ div(
 	cursor: pointer;
 }
 
-.bookDetail-body{
+.bookDetail-body {
 	display: flex;
 	margin-top: 1.5rem;
 }
@@ -115,14 +113,14 @@ div(
 	height: 15rem;
 }
 
-
 ul {
 	margin-bottom: auto;
 }
+
 li {
 	list-style-type: none;
 	color: var(--text-color-75);
-	font-size: 1.125rem; /* 18px */
+	font-size: 1.125rem;
 }
 
 li:not(:last-child) {
@@ -133,7 +131,7 @@ li:last-of-type {
 	text-transform: capitalize;
 }
 
-strong{
+strong {
 	font-weight: 500;
 	color: var(--text-color);
 }
@@ -141,5 +139,4 @@ strong{
 .button {
 	align-self: flex-end;
 }
-
 </style>

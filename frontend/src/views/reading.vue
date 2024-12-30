@@ -2,7 +2,7 @@
 import { mapStores, mapState } from 'pinia'
 import { useBookStore } from '@/stores/book'
 export default {
-	name: "ReadingPage",
+	name: 'ReadingPage',
 	computed: {
 		...mapStores(useBookStore),
 		...mapState(useBookStore, ['books']),
@@ -11,13 +11,13 @@ export default {
 			return this.bookStore.getBook
 		}
 	},
+	mounted() {
+		this.fetchBook(this.$route.params.id)
+	},
 	methods: {
 		fetchBook(id) {
 			this.bookStore.fetchBook(id)
 		}
-	},
-	mounted() {
-		this.fetchBook(this.$route.params.id)
 	},
 }
 </script>

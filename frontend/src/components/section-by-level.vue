@@ -1,20 +1,29 @@
 <script>
-import BookCard from './book-card.vue';
-import { useBookStore } from '@/stores/book';
+import BookCard from './book-card.vue'
+import { useBookStore } from '@/stores/book'
 
 export default {
 	name: 'SectionByLevel',
-	props:{
-		level: '',
-		books: [],
+	components: {
+		BookCard
 	},
+	props: {
+		level: {
+			type: String,
+			required: true,
+			default: ''
+		},
+		books: {
+			type: Array,
+			required: true,
+			default: () => []
+		}
+	},
+	emits: ['toggle-book-detail'],
 	data() {
 		return {
 			bookStore: useBookStore(),
 		}
-	},
-	components: {
-		BookCard
 	},
 	computed:{
 		showViewMore() {
