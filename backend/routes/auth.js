@@ -39,8 +39,8 @@ router.post('/login', async (req, res) => {
 				{ expiresIn: '1h' }
 			)
 			res.cookie('token', token, {
-					httpOnly: true, 
-					sameSite: 'strict'
+				httpOnly: true, 
+				sameSite: 'strict'
 			})
 			await LogService.add({
 				userId: _id,
@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
 		})
 		.catch(err =>{
 			res.status(500).json({ err: err.message })
-	})
+		})
 })
 
 router.post('/logout', (req, res) => {

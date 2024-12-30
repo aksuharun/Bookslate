@@ -31,7 +31,7 @@ function isAdmin (req, res, next) {
 			.then(user => {
 				console.log(user)
 				if (user.userRole != 'admin') {
-					console.log(`${user._id} trying to access admin route`)
+					console.warn(`${user._id} trying to access admin route`)
 					res.status(403).json({ msg: 'Forbidden' })
 				}
 			})
@@ -77,4 +77,4 @@ const storage = multer.diskStorage({
 const uploadHandler = multer({ storage: storage })
 
 
-export { isAuthenticated, isAdmin, isSelfOrAdmin, uploadHandler}
+export { isAuthenticated, isAdmin, isSelfOrAdmin, uploadHandler }

@@ -5,7 +5,7 @@ import LogService from '../services/log-service.js'
 import BookService from '../services/book-service.js'
 import LocalFileService from '../services/local-file-service.js'
 import { isAuthenticated, isAdmin, uploadHandler } from './middleware.js'
-import {EPub} from 'epub2'
+import { EPub } from 'epub2'
 
 const router = express.Router()
 
@@ -15,13 +15,13 @@ router.get('/add', (req, res) => {
 	res.render('add-book')
 })
 
-router.get('/all', async (req, res) => {
+router.get('/all', isAuthenticated, async (req, res) => {
 	await BookService.findAll()
 		.then(books => {
 			res.render('list', { items: books, itemType:'Book' })
 		})
 		.catch((err) => {
-			res.status(500).json({ msg: 'Error getting books'})
+			res.status(500).json({ msg: 'Error getting books' })
 		
 		})
 })
@@ -33,7 +33,7 @@ router.get('/all/json', async (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(500).json({ msg: 'Error getting books'})
+			res.status(500).json({ msg: 'Error getting books' })
 		
 		})
 })
@@ -45,7 +45,7 @@ router.get('/update/:id', async(req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(404).json({ msg: 'Book not found'})
+			res.status(404).json({ msg: 'Book not found' })
 		
 		})
 })
@@ -73,7 +73,7 @@ router.get('/delete/:id', async (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(404).json({ msg: 'Book not found'})
+			res.status(404).json({ msg: 'Book not found' })
 		})
 })
 
@@ -84,7 +84,7 @@ router.get('/:id', async (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(404).json({ msg: 'Book not found'})
+			res.status(404).json({ msg: 'Book not found' })
 		
 		})
 })
@@ -93,32 +93,32 @@ router.get('/:id/json', async (req, res) => {
 	await BookService.find(req.params.id)
 		.then(book => {
 			if (!book) {
-				return res.status(404).json({ msg: 'Book not found'})
+				return res.status(404).json({ msg: 'Book not found' })
 			}
 			res.json(book)
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(404).json({ msg: 'Book not found'})
+			res.status(404).json({ msg: 'Book not found' })
 		})
 })
 
 
 router.get('/level/:level/limit/:limit', async (req, res) => {
 	await BookService.findByField(
-		{ "level": req.params.level.toLowerCase() },
+		{ 'level': req.params.level.toLowerCase() },
 		parseInt(req.params.limit)
 	).then(books => {
-			res.status(200).json(books)
-		})
+		res.status(200).json(books)
+	})
 		.catch((err) => {
 			console.log(err)
-			res.status(500).json({ msg: 'Error getting books'})
+			res.status(500).json({ msg: 'Error getting books' })
 		})
 })
 
 router.get('/level/:level/count', async (req, res) => {
-	await BookService.countByField({ "level": req.params.level.toLowerCase() })
+	await BookService.countByField({ 'level': req.params.level.toLowerCase() })
 		.then(count => {
 			res.status(200).json(count)
 		})
@@ -132,23 +132,23 @@ router.get('/epub/:id', async (req, res) => {
 		}		
 		var html
 		EPub.createAsync(`./${book.fileUrl}`, null, '')
-		.then(epub => {
-			html = epub.flow
-			console.log('test')
-			.filter((chapter) => chapter.id.includes('item'))
-			.map(chapter => {
-				return new Promise((resolve, reject) => {
-					epub.getChapter(chapter.id, (err, text) => {
-						if(err) return reject(err)
-						resolve(text)
+			.then(epub => {
+				html = epub.flow
+				console.log('test')
+					.filter((chapter) => chapter.id.includes('item'))
+					.map(chapter => {
+						return new Promise((resolve, reject) => {
+							epub.getChapter(chapter.id, (err, text) => {
+								if(err) return reject(err)
+								resolve(text)
+							})
+						})
 					})
-				})
 			})
-		})
-		.catch(err => {
-			console.log(err)
-			res.status(404).json({ msg: 'Error reading book'})
-		})
+			.catch(err => {
+				console.log(err)
+				res.status(404).json({ msg: 'Error reading book' })
+			})
 		res.send(html)
 	}
 	catch (err) {
@@ -159,11 +159,11 @@ router.get('/epub/:id', async (req, res) => {
 // Book Fields required for upload and update operations
 const bookFields = [
 	{
-		name: "bookFile",
+		name: 'bookFile',
 		maxCount: 1
 	},
 	{
-		name: "coverImageFile",
+		name: 'coverImageFile',
 		maxCount: 1
 	}
 ]
@@ -190,11 +190,11 @@ router.post('/add', isAdmin, uploadHandler.fields(bookFields), async (req, res) 
 			refType: 'Book',
 			refId: book._id,
 		})
-		res.json({ msg: 'Book added successfully'})
+		res.json({ msg: 'Book added successfully' })
 	}catch(err){
 		await LocalFileService.deleteFiles([bookFile.path, coverImageFile.path])
 		console.log(err)
-		res.status(400).json({ msg: 'Error adding book'})
+		res.status(400).json({ msg: 'Error adding book' })
 	}
 })
 
@@ -202,27 +202,27 @@ router.put('/update/:id', isAdmin, uploadHandler.fields(bookFields) , async (req
 	const bookFile = req.files['bookFile'] ? req.files['bookFile'][0] : null
 	const coverImageFile = req.files['coverImageFile'] ? req.files['coverImageFile'][0] : null
 	if(!bookFile || !coverImageFile) throw new Error('Files not uploaded')
-		try {
-			await BookService.update(req.params.id, {
-				title: req.body.title,
-				author: req.body.author,
-				level: req.body.level,
-				language: req.body.language,
-				fileUrl: 'books/epubs/' + bookFile.filename,
-				coverImageUrl: 'books/covers/' + coverImageFile.filename,
-			})
+	try {
+		await BookService.update(req.params.id, {
+			title: req.body.title,
+			author: req.body.author,
+			level: req.body.level,
+			language: req.body.language,
+			fileUrl: 'books/epubs/' + bookFile.filename,
+			coverImageUrl: 'books/covers/' + coverImageFile.filename,
+		})
 
-			await LogService.add({
-				userId: req.decoded._id,
-				action: 'Update',
-				refType: 'Book',
-				refId: req.params.id,
-			})
-			res.json({ msg: 'Book updated successfully'})
+		await LogService.add({
+			userId: req.decoded._id,
+			action: 'Update',
+			refType: 'Book',
+			refId: req.params.id,
+		})
+		res.json({ msg: 'Book updated successfully' })
 	}catch(err){
 		await LocalFileService.deleteFiles([bookFile.path, coverImageFile.path])
 		console.log(err)
-		res.status(400).json({ msg: 'Error updating book'})
+		res.status(400).json({ msg: 'Error updating book' })
 	}
 })
 
@@ -237,10 +237,10 @@ router.delete('/delete/:id', isAdmin, async (req, res) => {
 			refType: 'Book',
 			refId: req.params.id,
 		})
-		res.json({ msg: 'Book deleted successfully'})
+		res.json({ msg: 'Book deleted successfully' })
 	}catch(err){
 		console.log(err)
-		res.status(400).json({ msg: 'Error deleting book'})
+		res.status(400).json({ msg: 'Error deleting book' })
 	}
 })
 

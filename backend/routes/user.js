@@ -1,7 +1,7 @@
 import express from 'express'
 import UserService from '../services/user-service.js'
 import LogService from '../services/log-service.js'
-import {isAuthenticated, isAdmin, isSelfOrAdmin} from './middleware.js'
+import { isAuthenticated, isAdmin, isSelfOrAdmin } from './middleware.js'
 
 const router = express.Router()
 
@@ -20,7 +20,7 @@ router.get('/all', async (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(500).json({ msg: 'Error getting users'})
+			res.status(500).json({ msg: 'Error getting users' })
 		})
 })
 
@@ -34,7 +34,7 @@ router.get('/all/json', async (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(500).res.json({ msg: 'Error getting users'})
+			res.status(500).res.json({ msg: 'Error getting users' })
 		})
 })
 
@@ -54,7 +54,7 @@ router.get('/:id', async (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(404).json({ msg: 'User not found'})
+			res.status(404).json({ msg: 'User not found' })
 		})
 })
 
@@ -66,7 +66,7 @@ router.get('/:id/json', async (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(404).json({ msg: 'User not found'})
+			res.status(404).json({ msg: 'User not found' })
 		})
 })
 
@@ -85,7 +85,7 @@ router.post('/add', isAdmin, async (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
-			res.status(500).json({ msg: 'Error adding user'})
+			res.status(500).json({ msg: 'Error adding user' })
 		})
 })
 
@@ -98,11 +98,11 @@ router.put('/update/:id', isSelfOrAdmin, async (req, res) => {
 				refType: 'User',
 				refId: user._id
 			})
-			res.json({ msg: 'User updated'})
+			res.json({ msg: 'User updated' })
 		})
 		.catch(err => {
 			console.log(err)
-			res.status(500).json({ msg: 'Error updating user'})
+			res.status(500).json({ msg: 'Error updating user' })
 		
 		})
 })
@@ -116,11 +116,11 @@ router.delete('/:id', isSelfOrAdmin, async (req, res) => {
 				refType: 'User',
 				refId: req.params.id
 			})
-			res.json({ msg: 'User deleted'})
+			res.json({ msg: 'User deleted' })
 		})
 		.catch(err => {
 			console.log(err)
-			res.status(500).json({ msg: 'Error deleting user'})
+			res.status(500).json({ msg: 'Error deleting user' })
 		})
 })
 

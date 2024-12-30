@@ -24,7 +24,7 @@ class Service {
 	}
 	
 	async update(id, item){
-		return await this.model.findByIdAndUpdate(id, item, {new: true}) // {new: true} returns the updated document
+		return await this.model.findByIdAndUpdate(id, item, { new: true }) // {new: true} returns the updated document
 	}
 	
 	async del(id){

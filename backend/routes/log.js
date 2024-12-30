@@ -8,11 +8,11 @@ const router = express.Router()
 router.get('/all', async (req, res) => {
 	await LogService.findAll()
 		.then(logs => {
-			res.render('list', { items: logs, itemType:'Log' })
+			res.render('list', { items: logs, itemType: 'Log' })
 		})
 		.catch(err => {
 			console.log(err)
-			res.status(500).json({ msg: 'Error getting logs'})
+			res.status(500).json({ msg: 'Error getting logs' })
 		})
 })
 
@@ -23,20 +23,20 @@ router.get('/all/json', async (req, res) => {
 		})
 		.catch(err => {
 			console.log(err)
-			res.status(500).json({ msg: 'Error getting logs'})
+			res.status(500).json({ msg: 'Error getting logs' })
 		})
 })
 
 // Delete Methods
 
 router.delete('/', async (req, res) => {
-	await logService.del(req.body.id)
+	await LogService.del(req.body.id)
 		.then(() => {
-			res.json({ msg: 'Log deleted'})
+			res.json({ msg: 'Log deleted' })
 		})
 		.catch(err => {
 			console.log(err)
-			res.status(500).json({ msg: 'Error deleting log'})
+			res.status(500).json({ msg: 'Error getting logs' })
 		})
 })
 
