@@ -13,6 +13,18 @@
 		"semi": ["error", "never"],
 		"quotes": ["error", "single"],
 		"no-unused-vars": "warn",
-		"no-console": "off"
-	}
+		"no-console": "off",
+		"object-curly-spacing": ["error", "always"]
+	},
+	"overrides": [
+		{
+			"files": ["views/*.js"],
+			"env": {
+				"browser": true
+			},
+			"globals": {
+				"axios": "readonly"
+			}
+		}
+	]
 }
