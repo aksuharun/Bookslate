@@ -23,7 +23,7 @@ const handleMongooseError = (err) => {
 	return null
 }
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
 	if (err instanceof BaseError) {
 		return res.status(err.statusCode).json({
 			status: 'error',
